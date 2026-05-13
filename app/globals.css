@@ -857,7 +857,8 @@ h3 {
 :root[data-theme="light"] .final-cta,
 :root[data-theme="light"] .contact-hero,
 :root[data-theme="light"] .services-hero,
-:root[data-theme="light"] .careers-hero {
+:root[data-theme="light"] .careers-hero,
+:root[data-theme="light"] .about-hero {
   color: #f3f4f6;
 }
 
@@ -868,7 +869,8 @@ h3 {
 :root[data-theme="light"] .final-cta p,
 :root[data-theme="light"] .contact-hero p,
 :root[data-theme="light"] .services-hero p,
-:root[data-theme="light"] .careers-hero p {
+:root[data-theme="light"] .careers-hero p,
+:root[data-theme="light"] .about-hero p {
   color: rgba(243, 244, 246, 0.82);
 }
 
@@ -1742,7 +1744,8 @@ h3 {
 }
 
 .contact-hero,
-.services-hero {
+.services-hero,
+.about-hero {
   min-height: 82vh;
   position: relative;
   display: flex;
@@ -1764,13 +1767,21 @@ h3 {
     url("https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1900&q=80") center / cover;
 }
 
+.about-hero {
+  background:
+    linear-gradient(90deg, rgba(10, 10, 10, 0.92), rgba(10, 10, 10, 0.46)),
+    url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1900&q=80") center / cover;
+}
+
 .contact-hero h1,
-.services-hero h1 {
+.services-hero h1,
+.about-hero h1 {
   max-width: 1120px;
 }
 
 .contact-hero p,
-.services-hero p {
+.services-hero p,
+.about-hero p {
   max-width: 760px;
   margin-top: 28px;
   color: var(--muted);
@@ -1971,6 +1982,102 @@ h3 {
   font-size: 18px;
 }
 
+.about-manifesto,
+.office-section {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  padding: 100px 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-manifesto > div,
+.office-section > div {
+  grid-column: span 7;
+}
+
+.about-manifesto > p,
+.office-section address {
+  grid-column: 9 / span 4;
+  align-self: flex-end;
+  color: var(--muted);
+  font-size: 18px;
+  font-style: normal;
+  line-height: 1.7;
+}
+
+.about-principles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 0 40px 100px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-principles article,
+.about-focus-grid article {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.about-principles article {
+  min-height: 270px;
+  padding: 24px;
+}
+
+.about-principles span {
+  color: var(--quiet);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.about-principles h3 {
+  margin-top: 48px;
+}
+
+.about-principles p {
+  margin-top: 14px;
+  color: var(--muted);
+}
+
+.about-focus {
+  padding: 96px 40px;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 78% 20%, rgba(37, 99, 235, 0.16), transparent 34%),
+    var(--bg);
+}
+
+.about-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.about-focus-grid article {
+  min-height: 150px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.about-focus-grid svg {
+  color: var(--accent);
+}
+
+.about-focus-grid span {
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.office-section {
+  background:
+    linear-gradient(90deg, var(--bg), rgba(37, 99, 235, 0.1)),
+    var(--bg);
+}
+
 .careers-hero h1 {
   max-width: 1120px;
 }
@@ -2083,7 +2190,9 @@ h3 {
   .research-section,
   .culture-section,
   .final-cta,
-  .stack-layout {
+  .stack-layout,
+  .about-manifesto,
+  .office-section {
     grid-template-columns: 1fr;
   }
 
@@ -2106,7 +2215,11 @@ h3 {
   .cta-copy,
   .cta-panel,
   .delivery-section > div,
-  .delivery-section > p {
+  .delivery-section > p,
+  .about-manifesto > div,
+  .about-manifesto > p,
+  .office-section > div,
+  .office-section address {
     grid-column: auto;
   }
 
@@ -2115,7 +2228,9 @@ h3 {
   .internship-info,
   .services-grid,
   .contact-process,
-  .footer-command {
+  .footer-command,
+  .about-principles,
+  .about-focus-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -2186,7 +2301,11 @@ h3 {
   .services-hero,
   .contact-layout,
   .services-grid-section,
-  .delivery-section {
+  .delivery-section,
+  .about-hero,
+  .about-manifesto,
+  .about-focus,
+  .office-section {
     padding-left: 18px;
     padding-right: 18px;
   }
@@ -2241,8 +2360,15 @@ h3 {
   .internship-info,
   .services-grid,
   .contact-process,
-  .form-grid {
+  .form-grid,
+  .about-principles,
+  .about-focus-grid {
     grid-template-columns: 1fr;
+  }
+
+  .about-principles {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .metrics {

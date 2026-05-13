@@ -93,6 +93,7 @@ function Header() {
         NEBULINT
       </Link>
       <nav aria-label="Primary navigation">
+        <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
         <a href="#products">Products</a>
         <a href="#architecture">Architecture</a>
@@ -202,6 +203,10 @@ function Footer() {
           <span>Response</span>
           <strong>Engineering review within 1 business day</strong>
         </div>
+        <div>
+          <span>Office</span>
+          <strong>4th Floor SR Bharath Apartments, Bengaluru 560075</strong>
+        </div>
       </div>
       <div className="footer-grid">
         <div>
@@ -213,6 +218,7 @@ function Footer() {
         </div>
         <div>
           <h4>Company</h4>
+          <Link href="/about">About</Link>
           <a href="#research">Research</a>
           <Link href="/careers">Careers</Link>
           <Link href="/contact">Contact</Link>
@@ -225,7 +231,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>2026 NEBULINT. Intelligent infrastructure and operational technology.</span>
+        <span>2026 NEBULINT. 4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075.</span>
         <span>Security / Reliability / Autonomy</span>
       </div>
     </footer>

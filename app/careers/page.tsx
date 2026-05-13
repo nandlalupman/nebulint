@@ -28,6 +28,7 @@ export default function CareersPage() {
           NEBULINT
         </Link>
         <nav aria-label="Careers navigation">
+          <Link href="/about">About</Link>
           <Link href="/services">Services</Link>
           <Link href="/#architecture">Architecture</Link>
           <Link href="/#operations">Operations</Link>

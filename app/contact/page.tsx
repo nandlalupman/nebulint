@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Building2, Clock, Mail, Send, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, Send, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const projectTypes = [
@@ -19,6 +19,7 @@ function ContactHeader() {
         NEBULINT
       </Link>
       <nav aria-label="Contact navigation">
+        <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
@@ -66,6 +67,11 @@ export default function ContactPage() {
             </article>
             <article>
               <Building2 size={21} />
+              <h3>Office</h3>
+              <p>4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075.</p>
+            </article>
+            <article>
+              <MapPin size={21} />
               <h3>Best Fit</h3>
               <p>Enterprise teams, industrial operators, research groups, robotics builders, and software organizations.</p>
             </article>

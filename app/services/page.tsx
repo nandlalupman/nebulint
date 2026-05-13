@@ -19,6 +19,7 @@ function ServicesHeader() {
         NEBULINT
       </Link>
       <nav aria-label="Services navigation">
+        <Link href="/about">About</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
         <Link href="/#operations">Operations</Link>
