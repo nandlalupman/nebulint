@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BrainCircuit, Cpu, Database, Eye, Network, Workflow } from "lucide-react";
 import { NebulintLogo } from "../components/NebulintLogo";
+import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const services = [
@@ -21,6 +22,7 @@ function ServicesHeader() {
       <nav aria-label="Services navigation">
         <Link href="/">Home</Link>
         <Link href="/about">About</Link>
+        <Link href="/services" className="active">Services</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
         <Link href="/#operations">Operations</Link>
@@ -37,6 +39,7 @@ export default function ServicesPage() {
   return (
     <>
       <ServicesHeader />
+      <PageStatusBar current="Services" section="AI Development" />
       <main>
         <section className="services-hero">
           <div className="ambient-grid" />

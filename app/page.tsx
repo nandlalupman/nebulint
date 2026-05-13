@@ -204,8 +204,12 @@ function Footer() {
           <strong>Engineering review within 1 business day</strong>
         </div>
         <div>
-          <span>Office</span>
-          <strong>4th Floor SR Bharath Apartments, Bengaluru 560075</strong>
+          <span>India Office</span>
+          <strong>4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075</strong>
+        </div>
+        <div>
+          <span>Italy Office</span>
+          <strong>Via Arenaccia, 29, 80141 Napoli NA, Italy</strong>
         </div>
       </div>
       <div className="footer-grid">
@@ -231,7 +235,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>2026 NEBULINT. 4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075.</span>
+        <span>2026 NEBULINT. India: 4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075. Italy: Via Arenaccia, 29, 80141 Napoli NA, Italy.</span>
         <span>Security / Reliability / Autonomy</span>
       </div>
     </footer>

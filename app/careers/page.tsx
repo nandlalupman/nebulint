@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
 import { NebulintLogo } from "../components/NebulintLogo";
+import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const roles = [
@@ -31,6 +32,7 @@ export default function CareersPage() {
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           <Link href="/services">Services</Link>
+          <Link href="/careers" className="active">Careers</Link>
           <Link href="/#architecture">Architecture</Link>
           <Link href="/#operations">Operations</Link>
         </nav>
@@ -40,6 +42,7 @@ export default function CareersPage() {
         </div>
       </header>
 
+      <PageStatusBar current="Careers" section="Engineering Team" />
       <main>
         <section className="careers-hero">
           <div className="ambient-grid" />

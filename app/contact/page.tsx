@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, PhoneCall, ShieldCheck } from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
 import { NebulintLogo } from "../components/NebulintLogo";
+import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 function ContactHeader() {
@@ -13,6 +14,7 @@ function ContactHeader() {
       <nav aria-label="Contact navigation">
         <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
+        <Link href="/contact" className="active">Contact</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
         <Link href="/careers">Careers</Link>
@@ -29,6 +31,7 @@ export default function ContactPage() {
   return (
     <>
       <ContactHeader />
+      <PageStatusBar current="Contact" section="Client Intake" />
       <main>
         <section className="contact-hero">
           <div className="ambient-grid" />
@@ -68,8 +71,13 @@ export default function ContactPage() {
             </article>
             <article>
               <Building2 size={21} />
-              <h3>Office</h3>
+              <h3>India Office</h3>
               <p>4th Floor SR Bharath Apartments, 3rd Main Road, HAL 3rd Stage, Bengaluru - 560075.</p>
+            </article>
+            <article>
+              <Building2 size={21} />
+              <h3>Italy Office</h3>
+              <p>Via Arenaccia, 29, 80141 Napoli NA, Italy.</p>
             </article>
             <article>
               <MapPin size={21} />

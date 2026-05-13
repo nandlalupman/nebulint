@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Cpu, Eye, Network, ShieldCheck, Workflow } from "lucide-react";
 import { NebulintLogo } from "../components/NebulintLogo";
+import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const principles = [
@@ -16,7 +17,7 @@ const focus = [
   ["Robotics Platforms", Workflow],
   ["Monitoring Systems", Network],
   ["Secure Infrastructure", ShieldCheck],
-  ["Bengaluru Office", Building2]
+  ["Global Offices", Building2]
 ] as const;
 
 function AboutHeader() {
@@ -27,6 +28,7 @@ function AboutHeader() {
       </Link>
       <nav aria-label="About navigation">
         <Link href="/">Home</Link>
+        <Link href="/about" className="active">About</Link>
         <Link href="/services">Services</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
@@ -44,18 +46,19 @@ export default function AboutPage() {
   return (
     <>
       <AboutHeader />
+      <PageStatusBar current="About" section="Global Company" />
       <main>
         <section className="about-hero">
           <div className="ambient-grid" />
           <div className="eyebrow"><span /> About NEBULINT</div>
-          <h1>ENGINEERING INTELLIGENT INFRASTRUCTURE FROM BENGALURU.</h1>
+          <h1>ENGINEERING INTELLIGENT INFRASTRUCTURE FOR GLOBAL OPERATIONS.</h1>
           <p>
-            NEBULINT is an engineering-first AI development company building software systems for computer vision,
-            robotics, automation, monitoring, backend infrastructure, and real-world operational intelligence.
+            NEBULINT is a global engineering-first AI development company building software systems for computer vision,
+            robotics, automation, monitoring, backend infrastructure, and real-world operational intelligence across markets.
           </p>
           <div className="hero-actions">
             <Link href="/services" className="button primary">View Services <ArrowRight size={17} /></Link>
-            <Link href="/contact" className="button secondary">Contact Office</Link>
+            <Link href="/contact" className="button secondary">Contact Offices</Link>
           </div>
         </section>
 
@@ -82,30 +85,48 @@ export default function AboutPage() {
         </section>
 
         <section className="about-focus">
-          <div className="section-head">
-            <div className="eyebrow"><span /> What We Build</div>
-            <h2>AI DEVELOPMENT ACROSS SOFTWARE, VISION, ROBOTICS, AND INFRASTRUCTURE.</h2>
+          <div className="about-focus-copy">
+            <div className="section-head">
+              <div className="eyebrow"><span /> What We Build</div>
+              <h2>AI DEVELOPMENT ACROSS SOFTWARE, VISION, ROBOTICS, AND INFRASTRUCTURE.</h2>
+              <p>Systems work that connects field devices, industrial data, model services, robotics interfaces, and operational command surfaces.</p>
+            </div>
+            <div className="about-focus-grid">
+              {focus.map(([item, Icon]) => (
+                <article key={item}>
+                  <Icon size={22} />
+                  <span>{item}</span>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="about-focus-grid">
-            {focus.map(([item, Icon]) => (
-              <article key={item}>
-                <Icon size={22} />
-                <span>{item}</span>
-              </article>
-            ))}
+          <div className="about-focus-visual" aria-label="Cinematic AI infrastructure operations">
+            <div className="visual-readout">
+              <span>Global deployment fabric</span>
+              <strong>AI / Vision / Robotics / Cloud</strong>
+            </div>
           </div>
         </section>
 
         <section className="office-section">
           <div>
-            <div className="eyebrow"><span /> Office</div>
-            <h2>OUR ONLY OFFICE.</h2>
+            <div className="eyebrow"><span /> Offices</div>
+            <h2>GLOBAL ENGINEERING PRESENCE.</h2>
           </div>
-          <address>
-            4th Floor SR Bharath Apartments<br />
-            3rd Main Road, HAL 3rd Stage<br />
-            Bengaluru - 560075
-          </address>
+          <div className="office-list">
+            <address>
+              <strong>India Office</strong>
+              4th Floor SR Bharath Apartments<br />
+              3rd Main Road, HAL 3rd Stage<br />
+              Bengaluru - 560075
+            </address>
+            <address>
+              <strong>Italy Office</strong>
+              Via Arenaccia, 29<br />
+              80141 Napoli NA<br />
+              Italy
+            </address>
+          </div>
         </section>
       </main>
     </>
