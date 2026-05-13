@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Cpu, Eye, Network, ShieldCheck, Workflow } from "lucide-react";
+import { NebulintLogo } from "../components/NebulintLogo";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const principles = [
@@ -22,8 +23,7 @@ function AboutHeader() {
   return (
     <header className="site-header">
       <Link href="/" className="brand" aria-label="NEBULINT home">
-        <span className="brand-mark" />
-        NEBULINT
+        <NebulintLogo />
       </Link>
       <nav aria-label="About navigation">
         <Link href="/">Home</Link>

@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, PhoneCall, ShieldCheck } from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
+import { NebulintLogo } from "../components/NebulintLogo";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 function ContactHeader() {
   return (
     <header className="site-header">
       <Link href="/" className="brand" aria-label="NEBULINT home">
-        <span className="brand-mark" />
-        NEBULINT
+        <NebulintLogo />
       </Link>
       <nav aria-label="Contact navigation">
         <Link href="/about">About</Link>

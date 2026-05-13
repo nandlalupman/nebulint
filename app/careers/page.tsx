@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
+import { NebulintLogo } from "../components/NebulintLogo";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const roles = [
@@ -24,8 +25,7 @@ export default function CareersPage() {
     <>
       <header className="site-header">
         <Link href="/" className="brand" aria-label="NEBULINT home">
-          <span className="brand-mark" />
-          NEBULINT
+          <NebulintLogo />
         </Link>
         <nav aria-label="Careers navigation">
           <Link href="/">Home</Link>

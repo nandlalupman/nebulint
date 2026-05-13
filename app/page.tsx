@@ -3,6 +3,7 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { InteractiveArchitecture } from "./components/InteractiveArchitecture";
 import { InteractiveOperations } from "./components/InteractiveOperations";
 import { InteractiveSystemVisual } from "./components/InteractiveSystemVisual";
+import { NebulintLogo } from "./components/NebulintLogo";
 import { RailControls } from "./components/RailControls";
 import {
   ArrowRight,
@@ -89,8 +90,7 @@ function Header() {
   return (
     <header className="site-header">
       <Link href="/" className="brand" aria-label="NEBULINT home">
-        <span className="brand-mark" />
-        NEBULINT
+        <NebulintLogo />
       </Link>
       <nav aria-label="Primary navigation">
         <Link href="/about">About</Link>
@@ -177,7 +177,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-main">
         <div>
-          <div className="footer-logo"><span className="brand-mark" />NEBULINT</div>
+          <div className="footer-logo"><NebulintLogo showTagline /></div>
           <p>Engineering intelligent systems for modern infrastructure.</p>
           <div className="footer-contact-strip">
             <Link href="/contact">Start a project</Link>
