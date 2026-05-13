@@ -143,7 +143,7 @@ textarea {
 
 .site-header nav {
   display: flex;
-  gap: 30px;
+  gap: clamp(14px, 1.7vw, 26px);
   color: var(--muted);
   font-size: 13px;
 }
@@ -204,14 +204,32 @@ textarea {
 .page-status-bar nav {
   display: flex;
   justify-content: flex-end;
-  gap: 18px;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
 }
 
+.page-status-bar nav::-webkit-scrollbar {
+  display: none;
+}
+
 .page-status-bar nav a:hover {
   color: var(--text);
+}
+
+.page-status-bar nav a.active {
+  color: var(--text);
+}
+
+.page-status-bar nav a.active::after {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 7px;
+  background: var(--accent);
 }
 
 .header-actions {
@@ -296,12 +314,12 @@ textarea {
 }
 
 .hero {
-  min-height: 92svh;
+  min-height: 90svh;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 24px;
   align-items: center;
-  padding: 96px 40px 34px;
+  padding: 138px 40px 34px;
   position: relative;
   overflow: hidden;
   background:
@@ -2604,7 +2622,7 @@ h3 {
   .page-status-bar {
     top: 68px;
     height: 44px;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 10px;
     padding: 0 18px;
   }
@@ -2642,7 +2660,7 @@ h3 {
 
   .hero {
     min-height: auto;
-    padding-top: 92px;
+    padding-top: 144px;
     padding-bottom: 34px;
     gap: 26px;
     grid-template-columns: 1fr;

@@ -4,6 +4,7 @@ import { InteractiveArchitecture } from "./components/InteractiveArchitecture";
 import { InteractiveOperations } from "./components/InteractiveOperations";
 import { InteractiveSystemVisual } from "./components/InteractiveSystemVisual";
 import { NebulintLogo } from "./components/NebulintLogo";
+import { PageStatusBar } from "./components/PageStatusBar";
 import { RailControls } from "./components/RailControls";
 import {
   ArrowRight,
@@ -93,6 +94,7 @@ function Header() {
         <NebulintLogo />
       </Link>
       <nav aria-label="Primary navigation">
+        <Link href="/" className="active">Home</Link>
         <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
         <a href="#products">Products</a>
@@ -246,8 +248,9 @@ export default function Home() {
   return (
     <>
       <Header />
+      <PageStatusBar />
       <main>
-        <section className="hero">
+        <section className="hero" id="top">
           <div className="ambient-grid" />
           <div className="hero-copy">
             <div className="eyebrow"><span /> Advanced Systems Engineering</div>

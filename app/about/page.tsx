@@ -46,7 +46,7 @@ export default function AboutPage() {
   return (
     <>
       <AboutHeader />
-      <PageStatusBar current="About" section="Global Company" />
+      <PageStatusBar />
       <main>
         <section className="about-hero">
           <div className="ambient-grid" />

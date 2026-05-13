@@ -12,6 +12,7 @@ function ContactHeader() {
         <NebulintLogo />
       </Link>
       <nav aria-label="Contact navigation">
+        <Link href="/">Home</Link>
         <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
         <Link href="/contact" className="active">Contact</Link>
@@ -31,7 +32,7 @@ export default function ContactPage() {
   return (
     <>
       <ContactHeader />
-      <PageStatusBar current="Contact" section="Client Intake" />
+      <PageStatusBar />
       <main>
         <section className="contact-hero">
           <div className="ambient-grid" />

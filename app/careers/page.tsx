@@ -42,7 +42,7 @@ export default function CareersPage() {
         </div>
       </header>
 
-      <PageStatusBar current="Careers" section="Engineering Team" />
+      <PageStatusBar />
       <main>
         <section className="careers-hero">
           <div className="ambient-grid" />

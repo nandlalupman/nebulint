@@ -39,7 +39,7 @@ export default function ServicesPage() {
   return (
     <>
       <ServicesHeader />
-      <PageStatusBar current="Services" section="AI Development" />
+      <PageStatusBar />
       <main>
         <section className="services-hero">
           <div className="ambient-grid" />
