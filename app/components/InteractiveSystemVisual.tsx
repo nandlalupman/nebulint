@@ -29,6 +29,7 @@ export function InteractiveSystemVisual() {
   const current = modes[mode];
 
   const selectedSignal = useMemo(() => current.bars[selected] ?? current.bars[0], [current.bars, selected]);
+  const selectedLabel = current.labels[selected % current.labels.length];
 
   return (
     <div className="system-visual" aria-label="Interactive real-time infrastructure visualization">
@@ -65,6 +66,11 @@ export function InteractiveSystemVisual() {
       <div className="signal-readout">
         <span>{mode} signal</span>
         <strong>{selectedSignal}%</strong>
+      </div>
+      <div className="signal-detail" aria-live="polite">
+        <span>Selected graph bar</span>
+        <strong>Sample {String(selected + 1).padStart(2, "0")} / {selectedLabel}</strong>
+        <small>{selectedSignal >= 88 ? "High load detected" : selectedSignal >= 64 ? "Nominal processing range" : "Low activity interval"}</small>
       </div>
       <div className="signal-stack">
         {current.bars.map((height, index) => (

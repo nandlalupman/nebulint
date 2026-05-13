@@ -36,6 +36,7 @@ export function InteractiveOperations() {
     () => current.rows.map((row, index) => ({ row, value: ["OK", "LIVE", "12ms", "SYNC", "CLEAR"][index] })),
     [current.rows]
   );
+  const selectedStatus = (current.bars[selected] ?? 0) > 120 ? "Peak load" : (current.bars[selected] ?? 0) > 88 ? "Stable elevated" : "Nominal";
 
   return (
     <div className="ops-dashboard interactive-ops">
@@ -77,6 +78,11 @@ export function InteractiveOperations() {
         </div>
       </div>
       <div className="ops-side">
+        <div className="ops-side-summary">
+          <span>Graph selection</span>
+          <strong>{selectedStatus}</strong>
+          <small>Sample {String(selected + 1).padStart(2, "0")} is actively selected from the chart.</small>
+        </div>
         {rows.map(({ row, value }) => (
           <div className="ops-row" key={row}><Activity size={15} /> {row}<span>{value}</span></div>
         ))}

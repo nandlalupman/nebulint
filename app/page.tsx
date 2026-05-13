@@ -178,15 +178,35 @@ function Footer() {
         <div>
           <div className="footer-logo"><span className="brand-mark" />NEBULINT</div>
           <p>Engineering intelligent systems for modern infrastructure.</p>
+          <div className="footer-contact-strip">
+            <Link href="/contact">Start a project</Link>
+            <a href="mailto:contact@nebulint.com">contact@nebulint.com</a>
+            <Link href="/services">AI development services</Link>
+          </div>
         </div>
         <div className="footer-status">
           <span className="live-dot">ACTIVE</span>
           Global monitoring fabric online
         </div>
       </div>
+      <div className="footer-command">
+        <div>
+          <span>Deployment Modes</span>
+          <strong>Cloud / On-Prem / Edge</strong>
+        </div>
+        <div>
+          <span>Core Work</span>
+          <strong>AI, Vision, Robotics, Automation</strong>
+        </div>
+        <div>
+          <span>Response</span>
+          <strong>Engineering review within 1 business day</strong>
+        </div>
+      </div>
       <div className="footer-grid">
         <div>
           <h4>Systems</h4>
+          <Link href="/services">Services</Link>
           <a href="#products">Products</a>
           <a href="#architecture">Architecture</a>
           <a href="#operations">Operations</a>
@@ -235,8 +255,15 @@ export default function Home() {
         </section>
 
         <section className="metrics" aria-label="Platform metrics">
-          {["99.98% Reliability", "24/7 Monitoring", "Distributed Infrastructure", "Real-Time Processing", "Enterprise Security", "Autonomous Intelligence"].map((metric) => (
-            <div key={metric}>{metric}</div>
+          {[
+            ["99.98%", "Reliability"],
+            ["24/7", "Monitoring"],
+            ["Distributed", "Infrastructure"],
+            ["Real-Time", "Processing"],
+            ["Enterprise", "Security"],
+            ["Autonomous", "Intelligence"]
+          ].map(([value, label]) => (
+            <div key={label}><strong>{value}</strong><span>{label}</span></div>
           ))}
         </section>
 
@@ -408,21 +435,39 @@ export default function Home() {
             <div className="eyebrow"><span /> Technology Stack</div>
             <h2>TOOLS FOR REAL ENGINEERING WORKFLOWS.</h2>
           </div>
-          <div className="stack-grid">
-            {Object.entries(stack).map(([group, items]) => (
-              <div className="stack-card" key={group}>
-                <h3>{group}</h3>
-                {items.map((item) => <span key={item}>{item}</span>)}
+          <div className="stack-layout">
+            <div className="stack-console">
+              <span>NEBULINT BUILD MATRIX</span>
+              <strong>Model to infrastructure, one operational stack.</strong>
+              <div className="stack-pipeline">
+                <i>Data</i><i>Models</i><i>APIs</i><i>Queues</i><i>Dashboards</i><i>Deploy</i>
               </div>
-            ))}
+            </div>
+            <div className="stack-grid">
+              {Object.entries(stack).map(([group, items]) => (
+                <div className="stack-card" key={group}>
+                  <h3>{group}</h3>
+                  {items.map((item) => <span key={item}>{item}</span>)}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         <section className="final-cta">
-          <h2>BUILD THE NEXT GENERATION OF INTELLIGENT INFRASTRUCTURE.</h2>
-          <div>
-            <Link href="/contact" className="button primary">Start a Project <Boxes size={17} /></Link>
-            <Link href="/careers" className="button secondary">Explore Careers <ArrowRight size={17} /></Link>
+          <div className="cta-copy">
+            <div className="eyebrow"><span /> Engage NEBULINT</div>
+            <h2>BUILD THE NEXT GENERATION OF INTELLIGENT INFRASTRUCTURE.</h2>
+          </div>
+          <div className="cta-panel">
+            <p>Bring us a system problem: AI product development, computer vision, robotics software, automation, backend infrastructure, or monitoring platforms.</p>
+            <div className="cta-actions">
+              <Link href="/contact" className="button primary">Start a Project <Boxes size={17} /></Link>
+              <Link href="/careers" className="button secondary">Explore Careers <ArrowRight size={17} /></Link>
+            </div>
+            <div className="cta-mini-grid">
+              <span>Discovery</span><span>Architecture</span><span>Prototype</span><span>Deployment</span>
+            </div>
           </div>
         </section>
       </main>
