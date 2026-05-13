@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -73,17 +72,7 @@ export function PageStatusBar({ current, section }: PageStatusBarProps) {
     <div className="page-status-bar" aria-label="Current page">
       <span>{active.section}</span>
       <strong>{active.current}</strong>
-      <nav aria-label="Page shortcuts">
-        {statusLinks.map((item) => (
-          <Link
-            href={item.href}
-            className={active.current === item.current ? "active" : ""}
-            key={item.href}
-          >
-            {item.current}
-          </Link>
-        ))}
-      </nav>
+      <small>Current section</small>
     </div>
   );
 }
