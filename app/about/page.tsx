@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Cpu, Eye, Network, ShieldCheck, Workflow } from "lucide-react";
+import { HeaderNav } from "../components/HeaderNav";
 import { NebulintLogo } from "../components/NebulintLogo";
 import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
@@ -26,14 +27,7 @@ function AboutHeader() {
       <Link href="/" className="brand" aria-label="NEBULINT home">
         <NebulintLogo />
       </Link>
-      <nav aria-label="About navigation">
-        <Link href="/">Home</Link>
-        <Link href="/about" className="active">About</Link>
-        <Link href="/services">Services</Link>
-        <Link href="/#products">Products</Link>
-        <Link href="/#architecture">Architecture</Link>
-        <Link href="/careers">Careers</Link>
-      </nav>
+      <HeaderNav />
       <div className="header-actions">
         <ThemeToggle />
         <Link href="/contact" className="nav-cta contact-nav-cta">Contact <ArrowRight size={14} /></Link>

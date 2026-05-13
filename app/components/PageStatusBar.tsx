@@ -9,13 +9,19 @@ type PageStatusBarProps = {
   section?: string;
 };
 
-const homeSections = [
+const statusLinks = [
   { id: "top", current: "Home", section: "Platform", href: "/" },
+  { id: "about", current: "About", section: "Global Company", href: "/about" },
+  { id: "services", current: "Services", section: "AI Development", href: "/services" },
   { id: "products", current: "Products", section: "Product Systems", href: "/#products" },
   { id: "architecture", current: "Architecture", section: "System Design", href: "/#architecture" },
   { id: "operations", current: "Operations", section: "AI Ops Center", href: "/#operations" },
-  { id: "research", current: "Research", section: "R&D", href: "/#research" }
+  { id: "research", current: "Research", section: "R&D", href: "/#research" },
+  { id: "careers", current: "Careers", section: "Engineering Team", href: "/careers" },
+  { id: "contact", current: "Contact", section: "Client Intake", href: "/contact" }
 ];
+
+const homeSections = statusLinks.filter((item) => ["top", "products", "architecture", "operations", "research"].includes(item.id));
 
 function derivePage(pathname: string) {
   if (pathname === "/about") return { current: "About", section: "Global Company" };
@@ -63,22 +69,12 @@ export function PageStatusBar({ current, section }: PageStatusBarProps) {
     };
   }, [current, fallback.current, fallback.section, pathname, section]);
 
-  const shortcuts = pathname === "/"
-    ? homeSections
-    : [
-      { current: "Home", href: "/" },
-      { current: "About", href: "/about" },
-      { current: "Services", href: "/services" },
-      { current: "Careers", href: "/careers" },
-      { current: "Contact", href: "/contact" }
-    ];
-
   return (
     <div className="page-status-bar" aria-label="Current page">
       <span>{active.section}</span>
       <strong>{active.current}</strong>
       <nav aria-label="Page shortcuts">
-        {shortcuts.map((item) => (
+        {statusLinks.map((item) => (
           <Link
             href={item.href}
             className={active.current === item.current ? "active" : ""}

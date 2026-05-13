@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, PhoneCall, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, Clock, Mail, MapPin, PhoneCall, ShieldCheck } from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
+import { HeaderNav } from "../components/HeaderNav";
 import { NebulintLogo } from "../components/NebulintLogo";
 import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
@@ -11,18 +12,10 @@ function ContactHeader() {
       <Link href="/" className="brand" aria-label="NEBULINT home">
         <NebulintLogo />
       </Link>
-      <nav aria-label="Contact navigation">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/services">Services</Link>
-        <Link href="/contact" className="active">Contact</Link>
-        <Link href="/#products">Products</Link>
-        <Link href="/#architecture">Architecture</Link>
-        <Link href="/careers">Careers</Link>
-      </nav>
+      <HeaderNav />
       <div className="header-actions">
         <ThemeToggle />
-        <Link href="/" className="nav-cta"><ArrowLeft size={14} /> Home</Link>
+        <Link href="/contact" className="nav-cta contact-nav-cta active">Contact <ArrowRight size={14} /></Link>
       </div>
     </header>
   );

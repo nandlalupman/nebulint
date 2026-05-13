@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
+import { HeaderNav } from "../components/HeaderNav";
 import { NebulintLogo } from "../components/NebulintLogo";
 import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
@@ -28,14 +29,7 @@ export default function CareersPage() {
         <Link href="/" className="brand" aria-label="NEBULINT home">
           <NebulintLogo />
         </Link>
-        <nav aria-label="Careers navigation">
-          <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
-          <Link href="/services">Services</Link>
-          <Link href="/careers" className="active">Careers</Link>
-          <Link href="/#architecture">Architecture</Link>
-          <Link href="/#operations">Operations</Link>
-        </nav>
+        <HeaderNav />
         <div className="header-actions">
           <ThemeToggle />
           <Link href="/contact" className="nav-cta contact-nav-cta">Contact <ArrowRight size={14} /></Link>

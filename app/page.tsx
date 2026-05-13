@@ -3,6 +3,7 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { InteractiveArchitecture } from "./components/InteractiveArchitecture";
 import { InteractiveOperations } from "./components/InteractiveOperations";
 import { InteractiveSystemVisual } from "./components/InteractiveSystemVisual";
+import { HeaderNav } from "./components/HeaderNav";
 import { NebulintLogo } from "./components/NebulintLogo";
 import { PageStatusBar } from "./components/PageStatusBar";
 import { RailControls } from "./components/RailControls";
@@ -93,15 +94,7 @@ function Header() {
       <Link href="/" className="brand" aria-label="NEBULINT home">
         <NebulintLogo />
       </Link>
-      <nav aria-label="Primary navigation">
-        <Link href="/" className="active">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/services">Services</Link>
-        <a href="#products">Products</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#operations">Operations</a>
-        <a href="#research">Research</a>
-      </nav>
+      <HeaderNav />
       <div className="header-actions">
         <ThemeToggle />
         <Link href="/contact" className="nav-cta contact-nav-cta">
