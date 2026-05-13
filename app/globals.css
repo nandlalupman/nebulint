@@ -112,8 +112,8 @@ textarea {
 }
 
 .nebulint-logo {
-  width: 182px;
-  height: 51px;
+  width: 210px;
+  height: 66px;
   display: inline-grid;
   position: relative;
   flex: 0 0 auto;
@@ -1696,8 +1696,8 @@ h3 {
 }
 
 .footer-logo .nebulint-logo {
-  width: min(390px, 100%);
-  height: 110px;
+  width: min(430px, 100%);
+  height: 134px;
 }
 
 .footer-contact-strip {
@@ -2376,14 +2376,14 @@ h3 {
   }
 
   .site-header .nebulint-logo {
-    width: 138px;
-    height: 39px;
+    width: 148px;
+    height: 46px;
     flex: 0 0 auto;
   }
 
   .footer-logo .nebulint-logo {
-    width: min(310px, 100%);
-    height: 87px;
+    width: min(320px, 100%);
+    height: 100px;
   }
 
   .hero {

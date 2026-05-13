@@ -10,13 +10,13 @@ export function NebulintLogo({ showTagline = false }: NebulintLogoProps) {
     >
       <img
         className="nebulint-logo-image nebulint-logo-dark"
-        src="/logos/nebulint-logo-dark.jpeg"
+        src="/logos/nebulint-logo-transparent-dark.png"
         alt=""
         aria-hidden="true"
       />
       <img
         className="nebulint-logo-image nebulint-logo-light"
-        src="/logos/nebulint-logo-light.jpeg"
+        src="/logos/nebulint-logo-transparent-light.png"
         alt=""
         aria-hidden="true"
       />
