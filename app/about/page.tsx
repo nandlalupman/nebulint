@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Building2, Cpu, Eye, Network, ShieldCheck, Workflow } from "lucide-react";
+import { ArrowRight, Building2, Cpu, Eye, Network, ShieldCheck, Workflow } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const principles = [
@@ -26,15 +26,15 @@ function AboutHeader() {
         NEBULINT
       </Link>
       <nav aria-label="About navigation">
+        <Link href="/">Home</Link>
         <Link href="/services">Services</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
-        <Link href="/contact">Contact</Link>
         <Link href="/careers">Careers</Link>
       </nav>
       <div className="header-actions">
         <ThemeToggle />
-        <Link href="/" className="nav-cta"><ArrowLeft size={14} /> Home</Link>
+        <Link href="/contact" className="nav-cta contact-nav-cta">Contact <ArrowRight size={14} /></Link>
       </div>
     </header>
   );

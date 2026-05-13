@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
+import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const roles = [
@@ -28,15 +28,15 @@ export default function CareersPage() {
           NEBULINT
         </Link>
         <nav aria-label="Careers navigation">
+          <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           <Link href="/services">Services</Link>
           <Link href="/#architecture">Architecture</Link>
           <Link href="/#operations">Operations</Link>
-          <Link href="/contact">Contact</Link>
         </nav>
         <div className="header-actions">
           <ThemeToggle />
-          <Link href="/" className="nav-cta"><ArrowLeft size={14} /> Home</Link>
+          <Link href="/contact" className="nav-cta contact-nav-cta">Contact <ArrowRight size={14} /></Link>
         </div>
       </header>
 

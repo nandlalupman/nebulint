@@ -102,7 +102,7 @@ function Header() {
       </nav>
       <div className="header-actions">
         <ThemeToggle />
-        <Link href="/contact" className="nav-cta">
+        <Link href="/contact" className="nav-cta contact-nav-cta">
           Contact <ArrowRight size={14} />
         </Link>
       </div>
@@ -253,8 +253,8 @@ export default function Home() {
               and enterprise-scale operational technology for real-world environments.
             </p>
             <div className="hero-actions">
-              <a href="#systems" className="button primary">Explore Systems <ArrowRight size={17} /></a>
-              <Link href="/contact" className="button secondary">Talk to Engineering</Link>
+              <Link href="/contact" className="button primary">Start a Project <ArrowRight size={17} /></Link>
+              <a href="#systems" className="button secondary">Explore Systems</a>
             </div>
           </div>
           <InteractiveSystemVisual />
@@ -271,6 +271,18 @@ export default function Home() {
           ].map(([value, label]) => (
             <div key={label}><strong>{value}</strong><span>{label}</span></div>
           ))}
+        </section>
+
+        <section className="client-access" aria-label="Client contact access">
+          <div>
+            <span>Client Intake</span>
+            <h2>CONTACT NEBULINT FOR AI DEVELOPMENT, AUTOMATION, VISION, ROBOTICS, AND BACKEND SYSTEMS.</h2>
+          </div>
+          <p>
+            Send a project brief and our engineering desk will review scope, architecture, deployment environment,
+            and the fastest path to a production-ready system.
+          </p>
+          <Link href="/contact" className="button primary">Open Contact Page <ArrowRight size={17} /></Link>
         </section>
 
         <section className="split-section" id="systems">

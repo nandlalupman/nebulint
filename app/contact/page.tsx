@@ -1,15 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, Send, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Clock, Mail, MapPin, PhoneCall, ShieldCheck } from "lucide-react";
+import { ContactForm } from "../components/ContactForm";
 import { ThemeToggle } from "../components/ThemeToggle";
-
-const projectTypes = [
-  "Custom AI Development",
-  "Computer Vision System",
-  "Robotics Platform",
-  "AI Automation",
-  "Monitoring Dashboard",
-  "Backend Infrastructure"
-];
 
 function ContactHeader() {
   return (
@@ -46,6 +38,10 @@ export default function ContactPage() {
             Contact NEBULINT for AI development, computer vision, robotics software, intelligent automation,
             monitoring platforms, and enterprise backend infrastructure.
           </p>
+          <div className="hero-actions">
+            <a href="#project-inquiry" className="button primary">Submit Project Inquiry <ArrowRight size={17} /></a>
+            <a href="mailto:contact@nebulint.com" className="button secondary">Email Engineering Desk</a>
+          </div>
         </section>
 
         <section className="contact-layout">
@@ -54,6 +50,11 @@ export default function ContactPage() {
               <Mail size={21} />
               <h3>Direct Engineering Desk</h3>
               <a href="mailto:contact@nebulint.com">contact@nebulint.com</a>
+            </article>
+            <article>
+              <PhoneCall size={21} />
+              <h3>Primary Client Channel</h3>
+              <p>Use the inquiry form for project requests, discovery calls, architecture reviews, and deployment discussions.</p>
             </article>
             <article>
               <Clock size={21} />
@@ -77,58 +78,7 @@ export default function ContactPage() {
             </article>
           </div>
 
-          <form className="contact-form">
-            <div>
-              <h2>Project Inquiry</h2>
-              <p>Tell us what you are building. The more technical context you share, the faster we can route it.</p>
-            </div>
-            <label>
-              Name
-              <input name="name" placeholder="Your name" />
-            </label>
-            <label>
-              Work email
-              <input name="email" type="email" placeholder="name@company.com" />
-            </label>
-            <label>
-              Company
-              <input name="company" placeholder="Company / organization" />
-            </label>
-            <label>
-              Project type
-              <select name="projectType" defaultValue="">
-                <option value="" disabled>Select project type</option>
-                {projectTypes.map((type) => <option key={type}>{type}</option>)}
-              </select>
-            </label>
-            <div className="form-grid">
-              <label>
-                Timeline
-                <select name="timeline" defaultValue="">
-                  <option value="" disabled>Select timeline</option>
-                  <option>Immediate evaluation</option>
-                  <option>30-60 days</option>
-                  <option>Quarter planning</option>
-                  <option>Research phase</option>
-                </select>
-              </label>
-              <label>
-                Deployment environment
-                <select name="environment" defaultValue="">
-                  <option value="" disabled>Select environment</option>
-                  <option>Cloud</option>
-                  <option>On-prem</option>
-                  <option>Edge / device</option>
-                  <option>Hybrid</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              Technical brief
-              <textarea name="brief" placeholder="Describe the system, data sources, models, robotics hardware, dashboards, integrations, constraints, or goals." />
-            </label>
-            <button type="submit" className="button primary">Send Inquiry <Send size={16} /></button>
-          </form>
+          <ContactForm />
         </section>
 
         <section className="contact-process">

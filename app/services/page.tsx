@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BrainCircuit, Cpu, Database, Eye, Network, Workflow } from "lucide-react";
+import { ArrowRight, BrainCircuit, Cpu, Database, Eye, Network, Workflow } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 const services = [
@@ -19,15 +19,15 @@ function ServicesHeader() {
         NEBULINT
       </Link>
       <nav aria-label="Services navigation">
+        <Link href="/">Home</Link>
         <Link href="/about">About</Link>
         <Link href="/#products">Products</Link>
         <Link href="/#architecture">Architecture</Link>
         <Link href="/#operations">Operations</Link>
-        <Link href="/careers">Careers</Link>
       </nav>
       <div className="header-actions">
         <ThemeToggle />
-        <Link href="/" className="nav-cta"><ArrowLeft size={14} /> Home</Link>
+        <Link href="/contact" className="nav-cta contact-nav-cta">Contact <ArrowRight size={14} /></Link>
       </div>
     </header>
   );
