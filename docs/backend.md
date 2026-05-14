@@ -6,7 +6,7 @@
 - Database: Supabase Postgres.
 - Form intake: `POST /api/inquiries`, inserting into `public.project_inquiries`.
 - Career intake: `POST /api/careers`, inserting into `public.career_applications`.
-- Admin console: `/admin`, protected by `ADMIN_TOKEN`.
+- Admin console: `/admin`, protected by Supabase-backed admin credentials and a signed session cookie.
 - Editable content: `public.open_roles` and `public.case_studies`, managed from `/admin`.
 - File uploads later: Supabase Storage for technical briefs, diagrams, datasets, and NDA packets.
 - Email notifications later: Resend or Postmark from the API route after a successful insert.
@@ -20,14 +20,25 @@
 3. Add these environment variables in Vercel:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-   - `ADMIN_TOKEN`
+   - `ADMIN_SESSION_SECRET`
 4. Deploy to Vercel.
 
 The service role key stays server-side only. Do not expose it in client components.
 
 ## Admin Usage
 
-Open `/admin`, enter the value of `ADMIN_TOKEN`, then manage:
+First create the admin credential table and login function:
+
+1. Run `supabase/admin-auth.sql` in the Supabase SQL editor.
+2. Generate credential SQL locally:
+
+```bash
+npm run admin:credentials -- admin@nebulint.com "Use-A-Strong-Password" "NEBULINT Admin"
+```
+
+3. Copy the generated SQL into the Supabase SQL editor and run it.
+
+Then open `/admin`, sign in with the email and password, and manage:
 
 - Client project inquiries and their review status.
 - Career applications and their review status.
@@ -35,3 +46,5 @@ Open `/admin`, enter the value of `ADMIN_TOKEN`, then manage:
 - Case studies shown on the home page.
 
 Public pages use professional fallback content if Supabase is not configured yet.
+
+`ADMIN_TOKEN` is still supported as an emergency legacy header token, but normal admin usage should use Supabase credentials.

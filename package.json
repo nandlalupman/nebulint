@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "admin:credentials": "node scripts/create-admin-credentials.mjs",
     "lint": "next lint"
   },
   "dependencies": {

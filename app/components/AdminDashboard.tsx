@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { BriefcaseBusiness, CircleCheck, Database, Inbox, Loader2, Lock, Plus, RefreshCcw, Users } from "lucide-react";
+import { BriefcaseBusiness, CircleCheck, Inbox, Loader2, Lock, LogIn, Plus, RefreshCcw, Users } from "lucide-react";
 
 type Inquiry = {
   id: string;
@@ -77,7 +77,7 @@ const emptyWork = {
 };
 
 export function AdminDashboard() {
-  const [token, setToken] = useState("");
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [data, setData] = useState<Overview | null>(null);
   const [tab, setTab] = useState<Tab>("inquiries");
   const [loading, setLoading] = useState(false);
@@ -86,11 +86,7 @@ export function AdminDashboard() {
   const [workForm, setWorkForm] = useState(emptyWork);
 
   useEffect(() => {
-    const saved = window.sessionStorage.getItem("nebulint-admin-token") || "";
-    if (saved) {
-      setToken(saved);
-      void load(saved);
-    }
+    void load();
   }, []);
 
   const totals = useMemo(() => {
@@ -102,13 +98,12 @@ export function AdminDashboard() {
     };
   }, [data]);
 
-  async function load(nextToken = token) {
+  async function load() {
     setLoading(true);
     setMessage("");
 
     try {
       const response = await fetch("/api/admin/overview", {
-        headers: { "x-admin-token": nextToken },
         cache: "no-store"
       });
       const payload = await response.json();
@@ -116,7 +111,6 @@ export function AdminDashboard() {
       if (!response.ok) throw new Error(payload?.message || "Unable to load admin data.");
 
       setData(payload.data);
-      window.sessionStorage.setItem("nebulint-admin-token", nextToken);
     } catch (error) {
       setData(null);
       setMessage(error instanceof Error ? error.message : "Unable to load admin data.");
@@ -127,7 +121,28 @@ export function AdminDashboard() {
 
   async function submitToken(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await load(token);
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials)
+      });
+      const payload = await response.json();
+
+      if (!response.ok) throw new Error(payload?.message || "Admin sign in failed.");
+
+      setCredentials({ email: credentials.email, password: "" });
+      await load();
+    } catch (error) {
+      setData(null);
+      setMessage(error instanceof Error ? error.message : "Admin sign in failed.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function patch(path: string, body: Record<string, unknown>) {
@@ -136,12 +151,12 @@ export function AdminDashboard() {
     try {
       const response = await fetch(path, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload?.message || "Update failed.");
-      await load(token);
+      await load();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Update failed.");
     } finally {
@@ -155,13 +170,13 @@ export function AdminDashboard() {
     try {
       const response = await fetch(path, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload?.message || "Create failed.");
       reset();
-      await load(token);
+      await load();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Create failed.");
     } finally {
@@ -179,17 +194,27 @@ export function AdminDashboard() {
         </div>
         <form className="admin-login" onSubmit={submitToken}>
           <label>
-            Admin token
+            Admin email
             <input
-              value={token}
-              onChange={(event) => setToken(event.target.value)}
+              value={credentials.email}
+              onChange={(event) => setCredentials({ ...credentials, email: event.target.value })}
+              type="email"
+              placeholder="admin@nebulint.com"
+              required
+            />
+          </label>
+          <label>
+            Password
+            <input
+              value={credentials.password}
+              onChange={(event) => setCredentials({ ...credentials, password: event.target.value })}
               type="password"
-              placeholder="ADMIN_TOKEN"
+              placeholder="Supabase admin password"
               required
             />
           </label>
           <button className="button primary" type="submit" disabled={loading}>
-            {loading ? <Loader2 size={16} className="spin" /> : <Database size={16} />} Connect
+            {loading ? <Loader2 size={16} className="spin" /> : <LogIn size={16} />} Sign In
           </button>
         </form>
       </section>
@@ -219,7 +244,7 @@ export function AdminDashboard() {
                 <span>Live backend</span>
                 <h2>{tab.replace("-", " ")}</h2>
               </div>
-              <button className="admin-icon-button" onClick={() => load(token)} disabled={loading} aria-label="Refresh admin data">
+              <button className="admin-icon-button" onClick={() => load()} disabled={loading} aria-label="Refresh admin data">
                 <RefreshCcw size={17} />
               </button>
             </div>
@@ -334,7 +359,7 @@ export function AdminDashboard() {
       ) : (
         <section className="admin-empty">
           <h2>Connect to Supabase-backed operations.</h2>
-          <p>Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_TOKEN`, then enter the admin token above.</p>
+          <p>Run the Supabase admin auth SQL, create an admin user with the setup script, then sign in above.</p>
         </section>
       )}
     </main>
