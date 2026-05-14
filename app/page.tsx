@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getCaseStudies } from "../lib/content";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { InteractiveArchitecture } from "./components/InteractiveArchitecture";
 import { InteractiveOperations } from "./components/InteractiveOperations";
@@ -46,16 +47,6 @@ const stack = {
   Frontend: ["Next.js", "TypeScript", "TailwindCSS", "WebGL"],
   Backend: ["FastAPI", "Node.js", "Redis", "Kafka"]
 };
-
-const cases = [
-  "Autonomous Monitoring Platform",
-  "Industrial Vision Intelligence",
-  "Robotics Command Interface",
-  "Predictive Infrastructure Engine",
-  "AI Surveillance System",
-  "Real-Time Analytics Network",
-  "Smart Factory Intelligence Platform"
-];
 
 const products = [
   {
@@ -237,7 +228,9 @@ function Footer() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const cases = await getCaseStudies();
+
   return (
     <>
       <Header />
@@ -439,10 +432,10 @@ export default function Home() {
           </div>
           <div className="case-grid">
             {cases.map((item, index) => (
-              <article key={item} className="case-card">
+              <article key={item.id || item.title} className="case-card">
                 <span>0{index + 1}</span>
-                <h3>{item}</h3>
-                <p>Architecture, instrumentation, AI services, operations UI, deployment pipeline, and monitoring layer.</p>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
               </article>
             ))}
           </div>

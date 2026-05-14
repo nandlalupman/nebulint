@@ -1,18 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap, Send } from "lucide-react";
+import { ArrowRight, CheckCircle2, Cpu, FlaskConical, GraduationCap } from "lucide-react";
+import { getOpenRoles } from "../../lib/content";
+import { CareerForm } from "../components/CareerForm";
 import { HeaderNav } from "../components/HeaderNav";
 import { NebulintLogo } from "../components/NebulintLogo";
 import { PageStatusBar } from "../components/PageStatusBar";
 import { ThemeToggle } from "../components/ThemeToggle";
-
-const roles = [
-  "Computer Vision Engineer",
-  "Robotics Systems Engineer",
-  "AI/ML Engineer",
-  "Full Stack Platform Engineer",
-  "Research Engineer",
-  "Backend Systems Engineer"
-];
 
 const projects = [
   "Build object detection pipelines for industrial environments",
@@ -22,7 +15,9 @@ const projects = [
   "Evaluate models, datasets, latency, and deployment behavior"
 ];
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const roles = await getOpenRoles();
+
   return (
     <>
       <header className="site-header">
@@ -50,45 +45,16 @@ export default function CareersPage() {
             <div className="eyebrow"><span /> Engineering Tracks</div>
             <div className="role-list">
               {roles.map((role) => (
-                <article key={role}>
+                <article key={role.id || role.title}>
                   <Cpu size={18} />
-                  <span>{role}</span>
+                  <span>{role.title}</span>
                   <ArrowRight size={15} />
                 </article>
               ))}
             </div>
           </div>
 
-          <form className="application-form">
-            <div>
-              <h2>Talent Profile</h2>
-              <p>Share your engineering focus, project history, and the systems you want to build.</p>
-            </div>
-            <label>
-              Full name
-              <input name="name" placeholder="Your name" />
-            </label>
-            <label>
-              Email
-              <input name="email" type="email" placeholder="you@example.com" />
-            </label>
-            <label>
-              Role interest
-              <select name="role" defaultValue="">
-                <option value="" disabled>Select a role</option>
-                {roles.map((role) => <option key={role}>{role}</option>)}
-              </select>
-            </label>
-            <label>
-              Portfolio / GitHub
-              <input name="portfolio" placeholder="https://" />
-            </label>
-            <label>
-              Engineering statement
-              <textarea name="statement" placeholder="Tell us about systems, models, robotics, or infrastructure you have built." />
-            </label>
-            <button type="submit" className="button primary">Submit Profile <Send size={16} /></button>
-          </form>
+          <CareerForm roles={roles} />
         </section>
 
         <section className="internship-info">
