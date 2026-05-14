@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navItems = [
@@ -26,6 +27,7 @@ function getActiveKey(pathname: string, hash: string) {
 export function HeaderNav() {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const updateHash = () => setHash(window.location.hash);
@@ -42,13 +44,29 @@ export function HeaderNav() {
 
   const activeKey = getActiveKey(pathname, hash);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname, hash]);
+
   return (
-    <nav aria-label="Primary navigation">
-      {navItems.map((item) => (
-        <Link href={item.href} className={activeKey === item.key ? "active" : ""} key={item.key}>
-          {item.label}
-        </Link>
-      ))}
+    <nav className={`primary-nav${open ? " open" : ""}`} aria-label="Primary navigation">
+      <button
+        type="button"
+        className="mobile-nav-toggle"
+        aria-expanded={open}
+        aria-label={open ? "Close navigation" : "Open navigation"}
+        onClick={() => setOpen((value) => !value)}
+      >
+        {open ? <X size={17} /> : <Menu size={17} />}
+        <span>{open ? "Close" : "Menu"}</span>
+      </button>
+      <div className="nav-links">
+        {navItems.map((item) => (
+          <Link href={item.href} className={activeKey === item.key ? "active" : ""} key={item.key}>
+            {item.label}
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }
