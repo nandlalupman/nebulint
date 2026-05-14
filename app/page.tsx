@@ -41,11 +41,11 @@ const capabilities: Array<[string, string, LucideIcon, string]> = [
 ];
 
 const stack = {
-  "AI & ML": ["Python", "TensorFlow", "PyTorch", "OpenCV"],
-  Robotics: ["ROS", "Arduino", "Raspberry Pi", "Edge IO"],
-  Infrastructure: ["Docker", "Kubernetes", "AWS", "PostgreSQL"],
-  Frontend: ["Next.js", "TypeScript", "TailwindCSS", "WebGL"],
-  Backend: ["FastAPI", "Node.js", "Redis", "Kafka"]
+  "AI Runtime": ["Python", "PyTorch", "TensorFlow", "OpenCV"],
+  "Robotics Control": ["ROS", "Edge IO", "Sensor Fusion", "Telemetry"],
+  "Infrastructure": ["Docker", "Kubernetes", "AWS", "PostgreSQL"],
+  "Operations Interfaces": ["Command UI", "WebGL Maps", "Dashboards", "Alerting"],
+  "Backend Platform": ["FastAPI", "Redis", "Kafka", "Event Streams"]
 };
 
 const products = [
@@ -443,13 +443,13 @@ export default async function Home() {
 
         <section className="stack-section">
           <div className="section-head">
-            <div className="eyebrow"><span /> Technology Stack</div>
-            <h2>TOOLS FOR REAL ENGINEERING WORKFLOWS.</h2>
+            <div className="eyebrow"><span /> Engineering Stack</div>
+            <h2>INFRASTRUCTURE USED TO BUILD CLIENT SYSTEMS.</h2>
           </div>
           <div className="stack-layout">
             <div className="stack-console">
               <span>NEBULINT BUILD MATRIX</span>
-              <strong>Model to infrastructure, one operational stack.</strong>
+              <strong>From model runtime to operational deployment.</strong>
               <div className="stack-pipeline">
                 <i>Data</i><i>Models</i><i>APIs</i><i>Queues</i><i>Dashboards</i><i>Deploy</i>
               </div>
