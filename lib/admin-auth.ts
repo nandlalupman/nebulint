@@ -5,7 +5,7 @@ const cookieName = "nebulint_admin_session";
 const sessionDurationMs = 1000 * 60 * 60 * 12;
 
 function getSecret() {
-  return process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_TOKEN || "";
+  return process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_TOKEN || (process.env.NODE_ENV !== "production" ? "nebulint-local-demo-session" : "");
 }
 
 function sign(value: string) {

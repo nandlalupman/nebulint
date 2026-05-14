@@ -27,6 +27,18 @@ The service role key stays server-side only. Do not expose it in client componen
 
 ## Admin Usage
 
+## Local Demo Admin
+
+For local testing before Supabase is configured, `.env.local` can include:
+
+```env
+DEV_ADMIN_EMAIL=admin@nebulint.local
+DEV_ADMIN_PASSWORD=NebulintAdmin123!
+ADMIN_SESSION_SECRET=local-demo-session-secret
+```
+
+When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are absent and `NODE_ENV` is not `production`, `/admin` accepts those demo credentials and returns sample inquiries, applications, roles, and work items. This demo path is disabled in production.
+
 First create the admin credential table and login function:
 
 1. Run `supabase/admin-auth.sql` in the Supabase SQL editor.

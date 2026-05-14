@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "../../../../lib/admin-auth";
-import { insertRow } from "../../../../lib/supabase/rest";
+import { insertRow, isSupabaseConfigured } from "../../../../lib/supabase/rest";
 
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -17,6 +17,10 @@ export async function POST(request: Request) {
 
     if (!title || !summary) {
       return NextResponse.json({ ok: false, message: "Work title and summary are required." }, { status: 400 });
+    }
+
+    if (!isSupabaseConfigured() && process.env.NODE_ENV !== "production") {
+      return NextResponse.json({ ok: true, work: [{ id: "demo-work-created", ...body, title, summary }] });
     }
 
     const work = await insertRow("case_studies", {

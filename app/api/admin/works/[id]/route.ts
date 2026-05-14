@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "../../../../../lib/admin-auth";
-import { updateRow } from "../../../../../lib/supabase/rest";
+import { isSupabaseConfigured, updateRow } from "../../../../../lib/supabase/rest";
 
 const allowedFields = ["title", "summary", "category", "image_url", "sort_order", "is_active"];
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {
+    const { id } = await params;
     const body = await request.json();
     const update: Record<string, unknown> = {};
 
@@ -18,7 +19,11 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     update.updated_at = new Date().toISOString();
 
-    const work = await updateRow("case_studies", params.id, update);
+    if (!isSupabaseConfigured() && process.env.NODE_ENV !== "production") {
+      return NextResponse.json({ ok: true, work: [{ id, ...update }] });
+    }
+
+    const work = await updateRow("case_studies", id, update);
     return NextResponse.json({ ok: true, work });
   } catch (error) {
     return NextResponse.json(
