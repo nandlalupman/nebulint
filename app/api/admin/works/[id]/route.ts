@@ -5,7 +5,7 @@ import { updateRow, deleteRow } from "../../../../../lib/supabase/rest";
 const allowedFields = ["title", "summary", "category", "image_url", "sort_order", "is_active"];
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {
@@ -30,7 +30,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {

@@ -1,28 +1,8 @@
-import { createHmac, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
+import { deleteRowByColumn, insertRow, listRows } from "./supabase/rest";
 
 const cookieName = "nebulint_admin_session";
 const sessionDurationMs = 1000 * 60 * 60 * 12;
-
-function getSecret() {
-  const secret = process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_TOKEN;
-  if (!secret) {
-    throw new Error("ADMIN_SESSION_SECRET or ADMIN_TOKEN environment variable is not defined.");
-  }
-  return secret;
-}
-
-function sign(value: string) {
-  return createHmac("sha256", getSecret()).update(value).digest("base64url");
-}
-
-function safeEqual(left: string, right: string) {
-  const leftBuffer = Buffer.from(left);
-  const rightBuffer = Buffer.from(right);
-
-  if (leftBuffer.length !== rightBuffer.length) return false;
-  return timingSafeEqual(leftBuffer, rightBuffer);
-}
 
 function readCookie(request: Request, name: string) {
   const cookie = request.headers.get("cookie") || "";
@@ -34,18 +14,23 @@ function readCookie(request: Request, name: string) {
   return match ? decodeURIComponent(match.slice(name.length + 1)) : "";
 }
 
-export function createAdminSession(email: string) {
-  if (!getSecret()) {
-    throw new Error("ADMIN_SESSION_SECRET or ADMIN_TOKEN is required for admin sessions.");
-  }
+function makeSessionToken() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
 
-  const payload = Buffer.from(
-    JSON.stringify({ email, exp: Date.now() + sessionDurationMs }),
-    "utf8"
-  ).toString("base64url");
-  const signature = sign(payload);
+export async function createAdminSession(email: string) {
+  const token = makeSessionToken();
+  const expiresAt = new Date(Date.now() + sessionDurationMs).toISOString();
 
-  return `${payload}.${signature}`;
+  await insertRow("admin_sessions", {
+    token,
+    email: email.toLowerCase(),
+    expires_at: expiresAt
+  });
+
+  return token;
 }
 
 export function createAdminCookie(sessionToken: string) {
@@ -53,47 +38,53 @@ export function createAdminCookie(sessionToken: string) {
   return `${cookieName}=${encodeURIComponent(sessionToken)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 12}${secure}`;
 }
 
-function verifyAdminSession(sessionToken: string) {
-  if (!sessionToken || !getSecret()) return false;
+async function verifyAdminSession(sessionToken: string) {
+  if (!sessionToken) return false;
 
-  const [payload, signature] = sessionToken.split(".");
-  if (!payload || !signature || !safeEqual(sign(payload), signature)) return false;
+  const sessions = await listRows<{ token: string; email: string; expires_at: string }>(
+    "admin_sessions",
+    `select=token,email,expires_at&token=eq.${encodeURIComponent(sessionToken)}&limit=1`
+  );
 
+  const session = sessions[0];
+  if (!session) return false;
+
+  return new Date(session.expires_at).getTime() > Date.now();
+}
+
+async function clearExpiredAdminSessions() {
+  const now = new Date().toISOString();
   try {
-    const decoded = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { exp?: number };
-    return Boolean(decoded.exp && decoded.exp > Date.now());
+    const sessions = await listRows<{ token: string }>(
+      "admin_sessions",
+      `select=token&expires_at=lt.${encodeURIComponent(now)}`
+    );
+
+    await Promise.all(sessions.map((session) => deleteRowByColumn("admin_sessions", "token", session.token)));
   } catch {
-    return false;
+    // Best-effort cleanup only.
   }
 }
 
-export function requireAdmin(request: Request) {
-  const expected = process.env.ADMIN_TOKEN;
-  const authorization = request.headers.get("authorization") || "";
-  const bearer = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
-  const token = request.headers.get("x-admin-token") || bearer;
+export async function requireAdmin(request: Request) {
   const sessionToken = readCookie(request, cookieName);
 
-  if (verifyAdminSession(sessionToken)) {
+  await clearExpiredAdminSessions();
+
+  if (await verifyAdminSession(sessionToken)) {
     return { ok: true as const };
   }
 
-  if (!expected) {
-    return {
-      ok: false as const,
-      response: NextResponse.json(
-        { ok: false, message: "Admin session is missing. Sign in with Supabase admin credentials." },
-        { status: getSecret() ? 401 : 503 }
-      )
-    };
-  }
+  return {
+    ok: false as const,
+    response: NextResponse.json(
+      { ok: false, message: "Admin session is missing. Sign in with Supabase admin credentials." },
+      { status: 401 }
+    )
+  };
+}
 
-  if (!token || !safeEqual(token, expected)) {
-    return {
-      ok: false as const,
-      response: NextResponse.json({ ok: false, message: "Unauthorized admin request." }, { status: 401 })
-    };
-  }
-
-  return { ok: true as const };
+export async function revokeAdminSession(sessionToken: string) {
+  if (!sessionToken) return;
+  await deleteRowByColumn("admin_sessions", "token", sessionToken);
 }

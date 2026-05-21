@@ -56,6 +56,13 @@ create table if not exists public.site_settings (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.admin_sessions (
+  token text primary key,
+  email text not null,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now()
+);
+
 create index if not exists project_inquiries_created_at_idx
   on public.project_inquiries (created_at desc);
 
@@ -68,11 +75,15 @@ create index if not exists open_roles_sort_order_idx
 create index if not exists case_studies_sort_order_idx
   on public.case_studies (sort_order asc);
 
+create index if not exists admin_sessions_expires_at_idx
+  on public.admin_sessions (expires_at asc);
+
 alter table public.project_inquiries enable row level security;
 alter table public.career_applications enable row level security;
 alter table public.open_roles enable row level security;
 alter table public.case_studies enable row level security;
 alter table public.site_settings enable row level security;
+alter table public.admin_sessions enable row level security;
 
 -- The website writes through a Vercel server route using SUPABASE_SERVICE_ROLE_KEY.
 -- Keep direct browser inserts disabled unless you intentionally add a public policy.

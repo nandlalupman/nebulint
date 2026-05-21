@@ -116,6 +116,12 @@ export async function deleteRow(table: string, id: string) {
   });
 }
 
+export async function deleteRowByColumn(table: string, column: string, value: string) {
+  return supabaseRequest<null>(`${table}?${column}=eq.${encodeURIComponent(value)}`, {
+    method: "DELETE"
+  });
+}
+
 export type SiteSetting = {
   id?: string;
   setting_key: string;

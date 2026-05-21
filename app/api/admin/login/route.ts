@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Invalid admin credentials." }, { status: 401 });
     }
 
-    const sessionToken = createAdminSession(admin.email);
+    const sessionToken = await createAdminSession(admin.email);
     const response = NextResponse.json({ ok: true, admin });
     response.headers.append("Set-Cookie", createAdminCookie(sessionToken));
 

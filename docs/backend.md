@@ -6,7 +6,7 @@
 - Database: Supabase Postgres.
 - Form intake: `POST /api/inquiries`, inserting into `public.project_inquiries`.
 - Career intake: `POST /api/careers`, inserting into `public.career_applications`.
-- Admin console: `/admin`, protected by Supabase-backed admin credentials and a signed session cookie.
+- Admin console: `/admin`, protected by Supabase-backed admin credentials and a server-side session table.
 - Editable content: `public.open_roles` and `public.case_studies`, managed from `/admin`.
 - File uploads later: Supabase Storage for technical briefs, diagrams, datasets, and NDA packets.
 - Email notifications later: Resend or Postmark from the API route after a successful insert.
@@ -21,7 +21,6 @@
 4. Add these environment variables in Vercel:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-   - `ADMIN_SESSION_SECRET`
 5. Deploy to Vercel.
 
 The service role key stays server-side only. Do not expose it in client components.
@@ -35,7 +34,6 @@ For local testing before Supabase is configured, `.env.local` can include:
 ```env
 DEV_ADMIN_EMAIL=admin@nebulint.local
 DEV_ADMIN_PASSWORD=NebulintAdmin123!
-ADMIN_SESSION_SECRET=local-demo-session-secret
 ```
 
 When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are absent and `NODE_ENV` is not `production`, `/admin` accepts those demo credentials and returns sample inquiries, applications, roles, and work items. This demo path is disabled in production.
@@ -62,8 +60,6 @@ Then open `/admin`, sign in with the email and password, and manage:
 
 Public pages use professional fallback content if Supabase is not configured yet.
 
-`ADMIN_TOKEN` is still supported as an emergency legacy header token, but normal admin usage should use Supabase credentials.
-
 ## What Makes The Backend Work
 
 If you want inquiries, careers, admin editing, and case studies to work in production, you need all of these in place:
@@ -72,7 +68,6 @@ If you want inquiries, careers, admin editing, and case studies to work in produ
 2. Production environment variables:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-   - `ADMIN_SESSION_SECRET`
    - `DEV_ADMIN_EMAIL` and `DEV_ADMIN_PASSWORD` only for local demo mode
 3. A deployed Next.js app that can reach Supabase from server routes.
 4. Seed data in `public.case_studies` and `public.open_roles` if you want the home page and careers page to show real content immediately.

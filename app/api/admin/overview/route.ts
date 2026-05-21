@@ -3,7 +3,7 @@ import { requireAdmin } from "../../../../lib/admin-auth";
 import { listRows, getSiteSettings } from "../../../../lib/supabase/rest";
 
 export async function GET(request: Request) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {

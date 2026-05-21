@@ -7,7 +7,7 @@ function clean(value: unknown) {
 }
 
 export async function POST(request: Request) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {

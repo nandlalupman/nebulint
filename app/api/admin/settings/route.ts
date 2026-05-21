@@ -24,7 +24,7 @@ const defaultSettings: Record<string, Record<string, unknown>> = {
 };
 
 export async function GET(request: Request) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = requireAdmin(request);
+  const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
 
   try {
