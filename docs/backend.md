@@ -21,9 +21,12 @@
 4. Add these environment variables in Vercel:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
+   - `DEV_ADMIN_EMAIL` and `DEV_ADMIN_PASSWORD` only if you want local demo login
 5. Deploy to Vercel.
 
 The service role key stays server-side only. Do not expose it in client components.
+
+For local development, put the same values in `.env.local` and run the app with `npm run dev -- --port 5000`.
 
 ## Admin Usage
 
