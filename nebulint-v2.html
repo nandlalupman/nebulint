@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEBULINT — AI Infrastructure & Autonomous Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@300;400;700;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060A;--bg2:#0D0D12;--bg3:#161620;
+  --light:#F4F2ED;--border:rgba(255,255,255,0.07);
+  --border-md:rgba(255,255,255,0.11);--border-s:rgba(255,255,255,0.18);
+  --text:#EBE8E1;--text2:#8A8780;--text3:#484542;
+  --accent:#1740C4;--display:'Big Shoulders Display',sans-serif;
+  --body:'Instrument Sans',sans-serif;--serif:'Cormorant Garamond',serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:400;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg3)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:60px;border-bottom:1px solid var(--border);background:rgba(6,6,10,0.88);backdrop-filter:blur(20px)}
+.logo{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo-mark{width:20px;height:20px;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark::after{content:'';width:7px;height:7px;background:var(--accent)}
+.n-links{display:flex;gap:36px;list-style:none}
+.n-links a{font-size:12.5px;color:var(--text2);text-decoration:none;letter-spacing:.02em;transition:color .2s}
+.n-links a:hover{color:var(--text)}
+.n-right{display:flex;align-items:center;gap:16px}
+.n-right>a:first-child{font-size:12.5px;color:var(--text2);text-decoration:none}
+.pill{padding:8px 18px;background:var(--text);color:var(--bg);font-size:12.5px;font-weight:600;letter-spacing:.04em;text-decoration:none;transition:opacity .2s;display:inline-block}
+.pill:hover{opacity:.84}
+.ghost{padding:8px 18px;background:transparent;color:var(--text);font-size:12.5px;font-weight:500;letter-spacing:.04em;text-decoration:none;border:1px solid var(--border-md);transition:border-color .25s,background .25s;display:inline-block}
+.ghost:hover{border-color:var(--border-s);background:rgba(255,255,255,.03)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;opacity:.09}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:76px 76px;mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,#000 30%,transparent 100%)}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 100% 60% at 50% 100%,rgba(6,6,10,.96) 20%,transparent 80%)}
+.hero-cards{position:absolute;top:90px;right:56px;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.hcard{border:1px solid var(--border-md);padding:16px 20px 14px;background:rgba(13,13,18,.84);backdrop-filter:blur(16px);min-width:210px}
+.hc-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.hc-val{font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.015em;line-height:1}
+.hc-sub{font-size:10.5px;color:var(--text3);margin-top:3px;letter-spacing:.04em}
+.hc-bar{height:1px;background:linear-gradient(90deg,var(--accent) 55%,transparent);margin-top:12px;opacity:.4}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:30px;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.hero-eyebrow em{width:16px;height:1px;background:var(--accent);display:inline-block;font-style:normal}
+.hero-h1{font-family:var(--display);font-size:clamp(68px,11vw,162px);font-weight:900;line-height:.88;letter-spacing:-.03em;text-transform:uppercase;color:var(--text);max-width:1100px}
+.hero-h1 .mut{color:var(--text3)}
+.hero-foot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+.hero-desc{max-width:400px;font-size:15px;color:var(--text2);line-height:1.75}
+.hero-ctas{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.hero-micro{font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.pulse{width:5px;height:5px;border-radius:50%;background:#22C55E;box-shadow:0 0 7px rgba(34,197,94,.55);animation:pulse 2.2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* MARQUEE */
+.mq{overflow:hidden;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2)}
+.mq-track{display:flex;white-space:nowrap;animation:mq 32s linear infinite}
+.mq-i{display:inline-flex;align-items:center;gap:26px;padding-right:52px;font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.mq-i span{display:inline-block;width:3px;height:3px;background:var(--accent);border-radius:50%}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:52px 56px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--display);font-size:64px;font-weight:700;line-height:1;color:var(--text);letter-spacing:-.03em}
+.stat-u{font-size:26px;font-weight:400;color:var(--accent)}
+.stat-l{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-top:12px}
+
+/* SECTION */
+section{padding:108px 56px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:40px}
+.eyebrow::after{content:'';width:32px;height:1px;background:rgba(23,64,196,.4)}
+.sec-h{font-family:var(--display);font-size:clamp(44px,6vw,92px);font-weight:700;line-height:.9;letter-spacing:-.03em;text-transform:uppercase;color:var(--text)}
+
+/* MANIFESTO */
+.manifesto{background:var(--light);padding:128px 56px;border-top:1px solid rgba(0,0,0,.06)}
+.mf-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:200px 1fr;gap:80px;align-items:start}
+.mf-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.35);padding-top:12px;line-height:1.7}
+.mf-label strong{display:block;color:rgba(0,0,0,.55);margin-bottom:4px}
+.mf-quote{font-family:var(--serif);font-size:clamp(34px,4.5vw,60px);font-weight:400;font-style:italic;line-height:1.2;color:#0A0A0F;letter-spacing:-.01em}
+.mf-quote em{font-style:normal;color:var(--accent)}
+.mf-foot{max-width:1100px;margin:64px auto 0;display:flex;justify-content:space-between;align-items:flex-end;padding-top:40px;border-top:1px solid rgba(0,0,0,.08)}
+.mf-stats{display:flex;gap:64px}
+.mf-n{font-family:var(--display);font-size:44px;font-weight:700;color:#0A0A0F;letter-spacing:-.02em;line-height:1}
+.mf-u{font-size:18px;color:var(--accent)}
+.mf-l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-top:6px}
+.mf-cta{padding:12px 24px;border:1px solid rgba(0,0,0,.15);font-size:12.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#0A0A0F;text-decoration:none;transition:background .2s}
+.mf-cta:hover{background:rgba(0,0,0,.04)}
+
+/* PLATFORM CARDS */
+.plat-head{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:flex-end;margin-bottom:64px}
+.plat-desc{font-size:15px;color:var(--text2);line-height:1.75;max-width:380px}
+.plat-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.pc{border-right:1px solid var(--border);display:flex;flex-direction:column;transition:background .3s}
+.pc:last-child{border-right:none}
+.pc:hover{background:var(--bg2)}
+.pc-img{height:200px;overflow:hidden;position:relative;border-bottom:1px solid var(--border)}
+.pc-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.65);transition:transform .6s ease,filter .4s}
+.pc:hover .pc-img img{transform:scale(1.04);filter:brightness(.62) saturate(.9)}
+.pc-img-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(6,6,10,.85) 100%)}
+.pc-img-tag{position:absolute;bottom:14px;left:18px;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.pc-body{padding:36px;flex:1;display:flex;flex-direction:column}
+.pc-num{font-size:9.5px;letter-spacing:.22em;color:var(--text3);margin-bottom:20px}
+.pc-title{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:var(--text);margin-bottom:12px}
+.pc-desc{font-size:13.5px;color:var(--text2);line-height:1.72;flex:1}
+.pc-link{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:600;letter-spacing:.1em;color:var(--text3);text-decoration:none;margin-top:24px;text-transform:uppercase;transition:color .2s;align-self:flex-start}
+.pc-link:hover{color:var(--text)}
+.arr{display:inline-block;transition:transform .2s}
+.pc-link:hover .arr{transform:translateX(5px)}
+
+/* CINEMATIC */
+.cinema{position:relative;min-height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.cinema-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=2000&q=80') center 30%/cover no-repeat}
+.cinema-ov{position:absolute;inset:0;background:rgba(6,6,10,.73)}
+.cinema-in{position:relative;z-index:2;padding:0 56px;max-width:1000px}
+.cinema-ey{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:32px}
+.cinema-h{font-family:var(--display);font-size:clamp(56px,8.5vw,128px);font-weight:900;line-height:.88;letter-spacing:-.03em;text-transform:uppercase;color:#fff;margin-bottom:36px}
+.cinema-h span{color:rgba(255,255,255,.18)}
+.cinema-sub{font-size:16px;color:rgba(255,255,255,.45);max-width:520px;margin:0 auto 48px;line-height:1.7}
+.cinema-ctas{display:flex;gap:14px;justify-content:center}
+
+/* USE CASES */
+.uc-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-top:64px}
+.uc{border-right:1px solid var(--border);display:flex;flex-direction:column;transition:background .3s}
+.uc:last-child{border-right:none}
+.uc:hover{background:var(--bg2)}
+.uc-img{height:260px;overflow:hidden;position:relative}
+.uc-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.42) saturate(.6);transition:transform .7s,filter .4s}
+.uc:hover .uc-img img{transform:scale(1.05);filter:brightness(.52) saturate(.9)}
+.uc-img-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(6,6,10,.9) 100%)}
+.uc-cat{position:absolute;top:20px;left:20px;padding:5px 12px;border:1px solid rgba(255,255,255,.15);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);background:rgba(6,6,10,.5);backdrop-filter:blur(8px)}
+.uc-body{padding:32px;flex:1}
+.uc-title{font-family:var(--display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;color:var(--text);margin-bottom:10px}
+.uc-desc{font-size:13px;color:var(--text2);line-height:1.72;margin-bottom:20px}
+.uc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.uc-tag{padding:4px 10px;border:1px solid var(--border-md);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+
+/* HOW */
+.how{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-top:72px}
+.hs{padding:52px 44px;border-right:1px solid var(--border)}
+.hs:last-child{border-right:none}
+.hs-n{font-family:var(--display);font-size:64px;font-weight:900;color:rgba(255,255,255,.04);line-height:1;letter-spacing:-.03em;margin-bottom:8px}
+.hs-icon{width:40px;height:40px;border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;margin-bottom:28px}
+.hs-title{font-family:var(--display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;color:var(--text);margin-bottom:12px}
+.hs-desc{font-size:13.5px;color:var(--text2);line-height:1.72}
+.hs-tag{display:inline-flex;align-items:center;gap:7px;margin-top:24px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.hs-tag::before{content:'';width:12px;height:1px;background:var(--accent)}
+
+/* ARCHITECTURE */
+.arch-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:80px;align-items:center}
+.arch-diag{border:1px solid var(--border);padding:28px 32px;background:var(--bg2)}
+.al-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.al-htitle{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.al-ver{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);padding:3px 8px;border:1px solid rgba(23,64,196,.3)}
+.al-sec{margin-bottom:16px}
+.al-slabel{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.al-nodes{display:flex;gap:7px;flex-wrap:wrap}
+.al-node{padding:7px 12px;border:1px solid var(--border-md);font-size:10.5px;letter-spacing:.04em;color:var(--text2);transition:all .2s;cursor:pointer;user-select:none}
+.al-node:hover{border-color:var(--border-s);color:var(--text);background:rgba(255,255,255,.025)}
+.al-node.on{border-color:var(--accent);color:var(--text);background:rgba(23,64,196,.1)}
+.al-div{height:28px;display:flex;align-items:center;justify-content:center;font-size:8.5px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;gap:12px;margin:4px 0}
+.al-div::before,.al-div::after{content:'';flex:1;height:1px;background:var(--border)}
+.al-ftr{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.al-dep{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3)}
+.feat-list{list-style:none;margin-top:36px;max-width:380px}
+.feat-list li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--text2);line-height:1.6;padding:11px 0;border-bottom:1px solid var(--border)}
+.feat-list li:first-child{border-top:1px solid var(--border)}
+.feat-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:6px;flex-shrink:0}
+
+/* CAPABILITIES */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.cap-tags{display:flex;flex-wrap:wrap;gap:9px;align-content:start}
+.cap-tag{padding:9px 15px;border:1px solid var(--border-md);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);transition:border-color .25s,color .25s,background .25s}
+.cap-tag:hover{border-color:var(--border-s);color:var(--text);background:rgba(255,255,255,.02)}
+.specs{border:1px solid var(--border);margin-top:80px}
+.spec-pair{display:grid;grid-template-columns:1fr 1fr}
+.spec-cell{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.spec-cell:nth-child(even){border-right:none}
+.spec-cell:nth-last-child(-n+2){border-bottom:none}
+.spec-k{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.spec-v{font-family:var(--display);font-size:17px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+
+/* EDITORIAL */
+.editorial{position:relative;height:600px;overflow:hidden;border-top:1px solid var(--border)}
+.ed-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;filter:brightness(.32) saturate(.65)}
+.ed-in{position:relative;z-index:2;height:100%;display:flex;align-items:flex-end;padding:56px}
+.ed-text{max-width:700px}
+.ed-label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:20px}
+.ed-h{font-family:var(--serif);font-size:clamp(32px,4vw,54px);font-weight:300;font-style:italic;color:rgba(255,255,255,.88);line-height:1.25;margin-bottom:24px}
+.ed-sub{font-size:14px;color:rgba(255,255,255,.4);line-height:1.7;max-width:480px}
+
+/* PARTNERS */
+.partners{border-top:1px solid var(--border);padding:80px 56px}
+.p-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
+.p-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3)}
+.p-logos{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--border)}
+.p-logo{padding:28px 20px;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:background .25s}
+.p-logo:last-child{border-right:none}
+.p-logo:hover{background:var(--bg2)}
+.p-logo-t{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);transition:color .25s;text-align:center}
+.p-logo:hover .p-logo-t{color:var(--text)}
+
+/* TESTIMONIALS */
+.proof-hdr{padding:80px 56px 56px;border-top:1px solid var(--border)}
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.proof-card{background:var(--bg);padding:52px 56px;border-top:1px solid var(--border)}
+.proof-q{font-family:var(--display);font-size:clamp(20px,2.5vw,28px);font-weight:400;line-height:1.28;color:var(--text);letter-spacing:-.01em;margin-bottom:32px}
+.proof-attr{display:flex;align-items:center;gap:14px;padding-top:24px;border-top:1px solid var(--border)}
+.proof-av{width:32px;height:32px;border:1px solid var(--border-s);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0}
+.proof-name{font-size:11.5px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase}
+.proof-role{font-size:10.5px;color:var(--text3);letter-spacing:.03em;margin-top:2px}
+.proof-org{margin-left:auto;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);padding:5px 10px;border:1px solid var(--border)}
+
+/* PRESS */
+.press{padding:108px 56px;border-top:1px solid var(--border)}
+.press-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-top:64px}
+.press-item{padding:36px;border-right:1px solid var(--border);transition:background .25s}
+.press-item:last-child{border-right:none}
+.press-item:hover{background:var(--bg2)}
+.press-pub{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.press-pub::before{content:'';width:18px;height:1px;background:var(--accent);opacity:.5}
+.press-date{font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:14px}
+.press-title{font-family:var(--display);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;color:var(--text);line-height:1.2;margin-bottom:12px}
+.press-exc{font-size:13px;color:var(--text2);line-height:1.65}
+.press-link{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);text-decoration:none;margin-top:18px;transition:color .2s}
+.press-link:hover{color:var(--text)}
+.press-link span{display:inline-block;transition:transform .2s}
+.press-link:hover span{transform:translateX(4px)}
+
+/* CTA */
+.cta-sec{background:var(--light);padding:120px 56px}
+.cta-ey{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(6,6,10,.4);margin-bottom:36px;display:flex;align-items:center;gap:10px}
+.cta-ey::after{content:'';width:28px;height:1px;background:rgba(6,6,10,.15)}
+.cta-grid{display:grid;grid-template-columns:1fr auto;gap:100px;align-items:end}
+.cta-h{font-family:var(--display);font-size:clamp(48px,7vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;text-transform:uppercase;color:#06060A}
+.cta-desc{font-size:15px;color:rgba(6,6,10,.5);line-height:1.75;max-width:360px;margin-top:28px}
+.cta-right{display:flex;flex-direction:column;align-items:flex-end;gap:14px;padding-bottom:8px}
+.btn-dark{padding:14px 28px;background:#06060A;color:var(--text);font-size:12.5px;font-weight:600;letter-spacing:.05em;text-decoration:none;transition:opacity .2s;display:inline-block}
+.btn-dark:hover{opacity:.82}
+.cta-note{font-size:10.5px;color:rgba(6,6,10,.35);letter-spacing:.1em;text-transform:uppercase}
+.cta-doc{font-size:12px;color:rgba(6,6,10,.38);text-decoration:none;transition:color .2s}
+.cta-doc:hover{color:rgba(6,6,10,.7)}
+
+/* FOOTER */
+footer{padding:52px 56px;border-top:1px solid var(--border)}
+.ft-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:52px}
+.ft-logo{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);display:flex;align-items:center;gap:10px}
+.ft-lm{width:20px;height:20px;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ft-lm::after{content:'';width:7px;height:7px;background:var(--accent)}
+.ft-tag{font-size:11.5px;color:var(--text3);margin-top:10px;max-width:200px;line-height:1.65}
+.ft-cols{display:grid;grid-template-columns:repeat(4,140px);gap:44px}
+.ft-col-h{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text2);margin-bottom:16px}
+.ft-col ul{list-style:none}
+.ft-col li{margin-bottom:8px}
+.ft-col a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s}
+.ft-col a:hover{color:var(--text)}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border)}
+.ft-copy{font-size:11px;color:var(--text3);letter-spacing:.04em}
+.ft-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3)}
+.ft-legal{display:flex;gap:24px}
+.ft-legal a{font-size:11px;color:var(--text3);text-decoration:none;transition:color .2s}
+.ft-legal a:hover{color:var(--text)}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo"><div class="logo-mark"></div>Nebulint</a>
+  <ul class="n-links">
+    <li><a href="#">Platform</a></li><li><a href="#">Autonomy</a></li>
+    <li><a href="#">Solutions</a></li><li><a href="#">Research</a></li>
+    <li><a href="#">Enterprise</a></li><li><a href="#">Company</a></li>
+  </ul>
+  <div class="n-right">
+    <a href="#">Sign in</a>
+    <a href="#" class="pill">Request Access →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-cards">
+    <div class="hcard rv">
+      <div class="hc-label">Live Inference Load</div>
+      <div class="hc-val" id="infVal">347K</div>
+      <div class="hc-sub">req/s · Global Edge Network</div>
+      <div class="hc-bar"></div>
+    </div>
+    <div class="hcard rv d1">
+      <div class="hc-label">Platform Status</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-top:5px">
+        <div class="pulse"></div>
+        <div style="font-size:13px;font-weight:500;color:var(--text)">All Systems Nominal</div>
+      </div>
+      <div class="hc-sub">99.98% uptime · 30-day SLA</div>
+      <div class="hc-bar"></div>
+    </div>
+    <div class="hcard rv d2">
+      <div class="hc-label">Active Deployments</div>
+      <div class="hc-val">40<span style="font-size:18px;color:var(--accent)">+</span></div>
+      <div class="hc-sub">Defense · Industrial · Gov</div>
+      <div class="hc-bar"></div>
+    </div>
+  </div>
+  <div class="hero-eyebrow rv"><em></em>AI Infrastructure & Autonomous Systems</div>
+  <h1 class="hero-h1 rv">The Machine<br><span class="mut">Intelligence</span><br>Company</h1>
+  <div class="hero-foot rv">
+    <p class="hero-desc">Enterprise-grade AI infrastructure, autonomous robotics, and precision automation engineered for organizations where performance is non-negotiable and failure is not an option.</p>
+    <div class="hero-ctas">
+      <div style="display:flex;gap:12px"><a href="#" class="pill">Request Access →</a><a href="#" class="ghost">View Architecture</a></div>
+      <div class="hero-micro"><div class="pulse"></div>Trusted by 40+ defense &amp; enterprise organizations globally</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-track">
+    <span class="mq-i">AI Infrastructure<span></span></span><span class="mq-i">Autonomous Robotics<span></span></span><span class="mq-i">Precision Engineering<span></span></span><span class="mq-i">Defense Systems<span></span></span><span class="mq-i">Enterprise Automation<span></span></span><span class="mq-i">Machine Intelligence<span></span></span><span class="mq-i">Edge Computing<span></span></span><span class="mq-i">Sensor Fusion<span></span></span><span class="mq-i">Fleet Orchestration<span></span></span><span class="mq-i">Digital Twin<span></span></span><span class="mq-i">AI Infrastructure<span></span></span><span class="mq-i">Autonomous Robotics<span></span></span><span class="mq-i">Precision Engineering<span></span></span><span class="mq-i">Defense Systems<span></span></span><span class="mq-i">Enterprise Automation<span></span></span><span class="mq-i">Machine Intelligence<span></span></span><span class="mq-i">Edge Computing<span></span></span><span class="mq-i">Sensor Fusion<span></span></span><span class="mq-i">Fleet Orchestration<span></span></span><span class="mq-i">Digital Twin<span></span></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat rv"><div class="stat-n">40<span class="stat-u">+</span></div><div class="stat-l">Enterprise Deployments</div></div>
+  <div class="stat rv d1"><div class="stat-n">2.4<span class="stat-u">B</span></div><div class="stat-l">Data Points Daily</div></div>
+  <div class="stat rv d2"><div class="stat-n">99<span class="stat-u">.98</span></div><div class="stat-l">Platform Uptime SLA</div></div>
+  <div class="stat rv d3"><div class="stat-n">12<span class="stat-u">ms</span></div><div class="stat-l">P99 Inference Latency</div></div>
+</div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="mf-grid">
+    <div class="mf-label rv"><strong>About Nebulint</strong>Founded 2020<br>San Francisco, CA<br>Series C · $480M raised</div>
+    <blockquote class="mf-quote rv">We build the infrastructure that runs the machines that <em>run the world</em> — from contested battlefields to deep industrial automation, from the edge of a network to the edge of what's possible.</blockquote>
+  </div>
+  <div class="mf-foot">
+    <div class="mf-stats">
+      <div class="rv"><div class="mf-n">480<span class="mf-u">K</span></div><div class="mf-l">Requests / Second Peak</div></div>
+      <div class="rv d1"><div class="mf-n">12<span class="mf-u">ms</span></div><div class="mf-l">P99 Edge Latency</div></div>
+      <div class="rv d2"><div class="mf-n">200<span class="mf-u">+</span></div><div class="mf-l">Engineers & Researchers</div></div>
+    </div>
+    <a href="#" class="mf-cta rv">Read our story →</a>
+  </div>
+</div>
+
+<!-- PLATFORM -->
+<section>
+  <div class="plat-head">
+    <div><div class="eyebrow rv">Platform</div><h2 class="sec-h rv">Unified<br>Infrastructure</h2></div>
+    <p class="plat-desc rv">A vertically integrated stack spanning edge AI, autonomous actuation, and enterprise data orchestration. Built from first principles for organizations where failure is not an option.</p>
+  </div>
+  <div class="plat-grid">
+    <div class="pc rv">
+      <div class="pc-img"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="AI Processing" loading="lazy"><div class="pc-img-ov"></div><div class="pc-img-tag">AI Processing Layer</div></div>
+      <div class="pc-body"><div class="pc-num">01 / 03</div><div class="pc-title">Nebulint Core</div><p class="pc-desc">Distributed AI inference engine with hardware-accelerated processing across heterogeneous compute clusters. Sub-15ms P99 latency at planetary scale with zero cold-start overhead.</p><a href="#" class="pc-link">Explore platform <span class="arr">→</span></a></div>
+    </div>
+    <div class="pc rv d1">
+      <div class="pc-img"><img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80" alt="Robotics" loading="lazy"><div class="pc-img-ov"></div><div class="pc-img-tag">Autonomous Systems</div></div>
+      <div class="pc-body"><div class="pc-num">02 / 03</div><div class="pc-title">Autonomy Stack</div><p class="pc-desc">Full-stack robotics middleware for perception, planning, and precision control. Certified for safety-critical deployments in GPS-denied, visually degraded, and contested environments.</p><a href="#" class="pc-link">Explore autonomy <span class="arr">→</span></a></div>
+    </div>
+    <div class="pc rv d2">
+      <div class="pc-img"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" alt="Data" loading="lazy"><div class="pc-img-ov"></div><div class="pc-img-tag">Data Orchestration</div></div>
+      <div class="pc-body"><div class="pc-num">03 / 03</div><div class="pc-title">Nexus Intelligence</div><p class="pc-desc">Enterprise data orchestration and AI operations platform. Real-time situational awareness across distributed sensor networks, operational systems, and autonomous agent fleets.</p><a href="#" class="pc-link">Explore intelligence <span class="arr">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- CINEMATIC -->
+<div class="cinema">
+  <div class="cinema-bg"></div>
+  <div class="cinema-ov"></div>
+  <div class="cinema-in rv">
+    <div class="cinema-ey">Frontier Technology · Deployed at Scale</div>
+    <h2 class="cinema-h">Built for<br><span>the edge of</span><br>what's possible</h2>
+    <p class="cinema-sub">Nebulint operates where standard infrastructure fails — in contested environments, at the network edge, and inside systems where failure has real consequences.</p>
+    <div class="cinema-ctas"><a href="#" class="pill">View Case Studies →</a><a href="#" class="ghost">Technical Docs</a></div>
+  </div>
+</div>
+
+<!-- USE CASES -->
+<section>
+  <div class="eyebrow rv">Solutions</div>
+  <h2 class="sec-h rv">Where We Deploy</h2>
+  <div class="uc-grid">
+    <div class="uc rv">
+      <div class="uc-img"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80" alt="Defense" loading="lazy"><div class="uc-img-ov"></div><div class="uc-cat">01 — Defense</div></div>
+      <div class="uc-body"><div class="uc-title">Defense & Intelligence</div><p class="uc-desc">Mission-critical AI systems for ISR, autonomous platforms, and command infrastructure. FedRAMP High, IL5 certified. Air-gap deployment capable. Trusted by government and defense prime contractors across 12 nations.</p><div class="uc-tags"><span class="uc-tag">ISR Systems</span><span class="uc-tag">C2 Infrastructure</span><span class="uc-tag">UAV Autonomy</span><span class="uc-tag">Air-Gap</span></div></div>
+    </div>
+    <div class="uc rv d1">
+      <div class="uc-img"><img src="https://images.unsplash.com/photo-1581092921461-39b9d08a9b21?auto=format&fit=crop&w=800&q=80" alt="Industrial" loading="lazy"><div class="uc-img-ov"></div><div class="uc-cat">02 — Industrial</div></div>
+      <div class="uc-body"><div class="uc-title">Industrial Automation</div><p class="uc-desc">End-to-end AI automation for manufacturing, logistics, and process industries. Autonomous robotics, predictive maintenance, digital twins, and real-time quality inspection at scale.</p><div class="uc-tags"><span class="uc-tag">Robot Arms</span><span class="uc-tag">Digital Twin</span><span class="uc-tag">Predictive Maint.</span><span class="uc-tag">Vision QC</span></div></div>
+    </div>
+    <div class="uc rv d2">
+      <div class="uc-img"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80" alt="Infrastructure" loading="lazy"><div class="uc-img-ov"></div><div class="uc-cat">03 — Infrastructure</div></div>
+      <div class="uc-body"><div class="uc-title">Critical Infrastructure</div><p class="uc-desc">AI monitoring and autonomous response systems for energy grids, utilities, and transportation networks. 24/7 anomaly detection with sub-100ms response and full audit trails for regulatory compliance.</p><div class="uc-tags"><span class="uc-tag">Energy Grid</span><span class="uc-tag">Anomaly Detection</span><span class="uc-tag">SCADA</span><span class="uc-tag">Compliance</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="eyebrow rv">Process</div>
+  <h2 class="sec-h rv">From Contract<br>to Operational</h2>
+  <div class="how-steps">
+    <div class="hs rv">
+      <div class="hs-n">01</div>
+      <div class="hs-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="5" y="5" width="4" height="4" fill="var(--accent)"/><rect x="9" y="5" width="4" height="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width=".5"/><rect x="5" y="9" width="4" height="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width=".5"/><rect x="9" y="9" width="4" height="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width=".5"/></svg></div>
+      <div class="hs-title">Assess & Scope</div>
+      <p class="hs-desc">Our solutions engineering team embeds with your organization to map existing systems, identify integration points, and design a deployment architecture tailored to your operational requirements and security posture.</p>
+      <div class="hs-tag">Weeks 1–3</div>
+    </div>
+    <div class="hs rv d1">
+      <div class="hs-n">02</div>
+      <div class="hs-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><circle cx="9" cy="9" r="3" fill="var(--accent)"/><line x1="9" y1="1" x2="9" y2="4" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="9" y1="14" x2="9" y2="17" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="1" y1="9" x2="4" y2="9" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="14" y1="9" x2="17" y2="9" stroke="rgba(255,255,255,0.2)" stroke-width="1"/></svg></div>
+      <div class="hs-title">Deploy & Integrate</div>
+      <p class="hs-desc">Nebulint's platform is deployed on your infrastructure — on-premises, hybrid, or air-gapped. Full integration with existing SCADA, ERP, C2, or enterprise systems. Hardware provisioning and edge node configuration included.</p>
+      <div class="hs-tag">Weeks 4–10</div>
+    </div>
+    <div class="hs rv d2">
+      <div class="hs-n">03</div>
+      <div class="hs-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="1,14 6,8 10,10 14,3" stroke="var(--accent)" stroke-width="1.5" fill="none"/><circle cx="1" cy="14" r="1.5" fill="var(--accent)"/><circle cx="6" cy="8" r="1.5" fill="var(--accent)"/><circle cx="10" cy="10" r="1.5" fill="var(--accent)"/><circle cx="14" cy="3" r="1.5" fill="var(--accent)"/><line x1="1" y1="17" x2="17" y2="17" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg></div>
+      <div class="hs-title">Operate & Scale</div>
+      <p class="hs-desc">Go live with full operational coverage from day one. Our team monitors, maintains, and continuously improves your deployment. Model performance dashboards, SLA reporting, and dedicated escalation paths included.</p>
+      <div class="hs-tag">Ongoing · 24/7</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL QUOTE IMAGE -->
+<div class="editorial">
+  <div class="ed-bg"></div>
+  <div class="ed-in">
+    <div class="ed-text rv">
+      <div class="ed-label">Autonomy Stack · Field Deployment</div>
+      <h3 class="ed-h">"The first AI infrastructure<br>that understood what we<br>actually needed."</h3>
+      <p class="ed-sub">Every Nebulint deployment begins with a simple premise: your operational environment is unique, your constraints are real, and off-the-shelf AI is not sufficient.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<section>
+  <div class="arch-grid">
+    <div>
+      <div class="eyebrow rv">System Architecture</div>
+      <h2 class="sec-h rv">Layered &<br>Hardened</h2>
+      <p style="font-size:15px;color:var(--text2);line-height:1.75;margin-top:28px;max-width:360px" class="rv">A layered architecture engineered for contested, degraded, and denied environments. Every component hardened for mission-critical deployment with no external dependency requirements.</p>
+      <ul class="feat-list rv">
+        <li>Hardware-agnostic runtime supporting NVIDIA, Qualcomm, and Intel silicon</li>
+        <li>Zero-trust security architecture with per-node attestation</li>
+        <li>Full air-gap operation with encrypted offline model updates</li>
+        <li>Deterministic scheduling with real-time OS compatibility</li>
+      </ul>
+      <div class="rv" style="margin-top:32px"><a href="#" class="ghost">Technical Documentation →</a></div>
+    </div>
+    <div class="rv d1">
+      <div class="arch-diag">
+        <div class="al-hdr"><span class="al-htitle">Nebulint Stack — v4.2 Reference</span><span class="al-ver">Stable</span></div>
+        <div class="al-sec"><div class="al-slabel">Interface Layer</div><div class="al-nodes"><span class="al-node on">REST API</span><span class="al-node on">gRPC</span><span class="al-node">GraphQL</span><span class="al-node">WebSocket</span></div></div>
+        <div class="al-div">Orchestration Bus</div>
+        <div class="al-sec"><div class="al-slabel">Intelligence Layer</div><div class="al-nodes"><span class="al-node on">Inference Engine</span><span class="al-node on">Model Registry</span><span class="al-node on">Vision Models</span><span class="al-node">RAG Pipeline</span></div></div>
+        <div class="al-div">Data Plane</div>
+        <div class="al-sec"><div class="al-slabel">Autonomy Layer</div><div class="al-nodes"><span class="al-node on">SLAM / Nav</span><span class="al-node on">Path Planning</span><span class="al-node">Sensor Fusion</span><span class="al-node">Fleet Mgmt</span></div></div>
+        <div class="al-div">Hardware Abstraction Layer</div>
+        <div class="al-sec" style="margin-bottom:0"><div class="al-slabel">Compute Layer</div><div class="al-nodes"><span class="al-node on">NVIDIA Orin</span><span class="al-node on">Qualcomm AI</span><span class="al-node">Intel Xe</span><span class="al-node">Custom ASIC</span></div></div>
+        <div class="al-ftr"><span class="al-dep">Air-Gap · On-Prem · Hybrid</span><div class="pulse"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section style="border-top:1px solid var(--border);background:var(--bg2)">
+  <div class="cap-grid">
+    <div>
+      <div class="eyebrow rv">Capabilities</div>
+      <h2 class="sec-h rv">40+<br>Discrete<br>Modules</h2>
+      <p style="font-size:15px;color:var(--text2);line-height:1.75;margin-top:28px;max-width:380px" class="rv">Each capability independently deployable and composable. Mix and match modules to build the exact system your operational requirements demand.</p>
+      <div style="margin-top:44px" class="rv"><a href="#" class="ghost">Full Spec Sheet →</a></div>
+    </div>
+    <div class="cap-tags rv d1">
+      <span class="cap-tag">Computer Vision</span><span class="cap-tag">Sensor Fusion</span><span class="cap-tag">SLAM</span><span class="cap-tag">Path Planning</span><span class="cap-tag">Federated Learning</span><span class="cap-tag">Object Detection</span><span class="cap-tag">Edge Inference</span><span class="cap-tag">LLM Integration</span><span class="cap-tag">Predictive Maintenance</span><span class="cap-tag">Digital Twin</span><span class="cap-tag">Fleet Orchestration</span><span class="cap-tag">Cyber-Physical Security</span><span class="cap-tag">Real-Time Analytics</span><span class="cap-tag">Multi-Agent Coordination</span><span class="cap-tag">Terrain Mapping</span><span class="cap-tag">Autonomous Navigation</span><span class="cap-tag">RF Signal Processing</span><span class="cap-tag">Anomaly Detection</span><span class="cap-tag">Geospatial AI</span><span class="cap-tag">Scene Understanding</span>
+    </div>
+  </div>
+  <div class="specs rv" style="margin-top:80px">
+    <div class="spec-pair"><div class="spec-cell"><span class="spec-k">Inference Throughput</span><span class="spec-v">480K req/s</span></div><div class="spec-cell"><span class="spec-k">P99 Latency</span><span class="spec-v">12 ms</span></div></div>
+    <div class="spec-pair"><div class="spec-cell"><span class="spec-k">Edge Hardware</span><span class="spec-v">NVIDIA · Qualcomm · Intel</span></div><div class="spec-cell"><span class="spec-k">Platform Uptime</span><span class="spec-v">99.98% SLA</span></div></div>
+    <div class="spec-pair"><div class="spec-cell"><span class="spec-k">Data Sovereignty</span><span class="spec-v">Air-Gap Capable</span></div><div class="spec-cell"><span class="spec-k">Compliance</span><span class="spec-v">FedRAMP High · IL5</span></div></div>
+    <div class="spec-pair"><div class="spec-cell"><span class="spec-k">Protocol Support</span><span class="spec-v">ROS2 · MQTT · gRPC</span></div><div class="spec-cell"><span class="spec-k">Deployment Mode</span><span class="spec-v">On-Prem · Hybrid · Air-Gap</span></div></div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<div class="partners">
+  <div class="p-hdr"><div class="p-label rv">Technology Partners & Ecosystem</div><div style="font-size:12.5px;color:var(--text3)" class="rv">Certified integrations across hardware and software</div></div>
+  <div class="p-logos rv"><div class="p-logo"><div class="p-logo-t">NVIDIA</div></div><div class="p-logo"><div class="p-logo-t">AWS GovCloud</div></div><div class="p-logo"><div class="p-logo-t">Palantir</div></div><div class="p-logo"><div class="p-logo-t">Qualcomm</div></div><div class="p-logo"><div class="p-logo-t">L3Harris</div></div><div class="p-logo"><div class="p-logo-t">Intel</div></div></div>
+  <div class="p-logos rv" style="margin-top:-1px"><div class="p-logo"><div class="p-logo-t">Raytheon</div></div><div class="p-logo"><div class="p-logo-t">Lockheed Martin</div></div><div class="p-logo"><div class="p-logo-t">General Dynamics</div></div><div class="p-logo"><div class="p-logo-t">Microsoft Azure</div></div><div class="p-logo"><div class="p-logo-t">Bosch</div></div><div class="p-logo"><div class="p-logo-t">Siemens</div></div></div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div>
+  <div class="proof-hdr"><div class="eyebrow rv">Field Perspective</div><h2 class="sec-h rv" style="max-width:600px">What operators<br>say in the field</h2></div>
+  <div class="proof-grid">
+    <div class="proof-card rv"><p class="proof-q">"NEBULINT's infrastructure is unlike anything we've deployed in 20 years of systems integration. The latency, the reliability, the autonomy stack — it's a fundamentally different category of technology."</p><div class="proof-attr"><div class="proof-av">JM</div><div><div class="proof-name">James M.</div><div class="proof-role">Director of AI Systems</div></div><div class="proof-org">US Dept. of Defense</div></div></div>
+    <div class="proof-card rv d1"><p class="proof-q">"We evaluated every major AI infrastructure vendor. NEBULINT was the only platform that met our latency requirements at the edge while maintaining full air-gap compliance. There is simply no comparison."</p><div class="proof-attr"><div class="proof-av">SR</div><div><div class="proof-name">Sarah R.</div><div class="proof-role">Chief Technology Officer</div></div><div class="proof-org">Fortune 50 Industrial</div></div></div>
+    <div class="proof-card rv"><p class="proof-q">"The autonomy stack reduced our ground robotics deployment time from 14 weeks to 11 days. The ROS2 integration was seamless, and edge inference performance exceeded every benchmark we set."</p><div class="proof-attr"><div class="proof-av">DC</div><div><div class="proof-name">David C.</div><div class="proof-role">VP of Robotics Engineering</div></div><div class="proof-org">Tier-1 Manufacturer</div></div></div>
+    <div class="proof-card rv d1"><p class="proof-q">"Security-cleared infrastructure that actually performs. We've run Nebulint on everything from edge nodes in the field to on-prem servers in hardened facilities. It has never failed to meet mission requirements."</p><div class="proof-attr"><div class="proof-av">MK</div><div><div class="proof-name">M. Kovacs</div><div class="proof-role">Systems Integration Lead</div></div><div class="proof-org">NATO Member State</div></div></div>
+  </div>
+</div>
+
+<!-- PRESS -->
+<div class="press">
+  <div class="eyebrow rv">Press & Coverage</div>
+  <h2 class="sec-h rv">In the news</h2>
+  <div class="press-grid">
+    <div class="press-item rv"><div class="press-pub">The Financial Times</div><div class="press-date">March 2025</div><div class="press-title">The defense tech company rewriting autonomous systems</div><p class="press-exc">Nebulint has emerged as the infrastructure layer behind a new generation of autonomous defense platforms, with deployments spanning 12 countries and contracts worth over $1.2B.</p><a href="#" class="press-link">Read article <span>→</span></a></div>
+    <div class="press-item rv d1"><div class="press-pub">MIT Technology Review</div><div class="press-date">January 2025</div><div class="press-title">12ms: How Nebulint broke the edge inference barrier</div><p class="press-exc">At a P99 latency of 12 milliseconds, Nebulint's inference engine is operating at a speed that fundamentally changes what autonomous systems can do in real-time environments.</p><a href="#" class="press-link">Read article <span>→</span></a></div>
+    <div class="press-item rv d2"><div class="press-pub">Wall Street Journal</div><div class="press-date">November 2024</div><div class="press-title">Nebulint closes $480M Series C to expand global infrastructure</div><p class="press-exc">The AI infrastructure company announces a landmark raise led by Sequoia and General Catalyst, valuing the company at $4.8 billion and marking the largest defense-adjacent AI raise of the year.</p><a href="#" class="press-link">Read article <span>→</span></a></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-sec">
+  <div class="cta-ey rv">Get Started</div>
+  <div class="cta-grid">
+    <div><h2 class="cta-h rv">Deploy with<br>Confidence</h2><p class="cta-desc rv">Available to qualified enterprise and government organizations. All deployments include dedicated solutions engineering, integration support, and 24/7 operational coverage from day one.</p></div>
+    <div class="cta-right rv"><a href="#" class="btn-dark">Request Access →</a><a href="#" class="cta-doc">View Technical Documentation ↗</a><div class="cta-note">Cleared personnel inquiries welcome</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div><div class="ft-logo"><div class="ft-lm"></div>Nebulint</div><p class="ft-tag">AI infrastructure and autonomous systems for organizations operating at the frontier.</p></div>
+    <div class="ft-cols">
+      <div class="ft-col"><div class="ft-col-h">Platform</div><ul><li><a href="#">Nebulint Core</a></li><li><a href="#">Autonomy Stack</a></li><li><a href="#">Nexus Intelligence</a></li><li><a href="#">Edge Compute</a></li><li><a href="#">Security</a></li></ul></div>
+      <div class="ft-col"><div class="ft-col-h">Solutions</div><ul><li><a href="#">Defense</a></li><li><a href="#">Industrial</a></li><li><a href="#">Critical Infra.</a></li><li><a href="#">Enterprise</a></li><li><a href="#">Government</a></li></ul></div>
+      <div class="ft-col"><div class="ft-col-h">Research</div><ul><li><a href="#">Publications</a></li><li><a href="#">Open Source</a></li><li><a href="#">Benchmarks</a></li><li><a href="#">Tech Blog</a></li></ul></div>
+      <div class="ft-col"><div class="ft-col-h">Company</div><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2025 Nebulint Technologies Inc. All rights reserved.</div>
+    <div class="ft-status"><div class="pulse"></div>All systems operational</div>
+    <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a><a href="#">ITAR</a></div>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:0.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+const el=document.getElementById('infVal');
+if(el){setInterval(()=>{const c=parseInt(el.textContent);const d=Math.floor(Math.random()*14)-6;el.textContent=Math.max(295,Math.min(430,c+d))+'K'},1900)}
+const hbg=document.getElementById('heroBg');
+window.addEventListener('scroll',()=>{if(hbg)hbg.style.transform=`scale(1.04) translateY(${window.scrollY*0.1}px)`},{passive:true});
+document.querySelectorAll('.al-node').forEach(n=>n.addEventListener('click',function(){this.classList.toggle('on')}));
+const nav=document.querySelector('nav');
+window.addEventListener('scroll',()=>{nav.style.borderBottomColor=window.scrollY>40?'rgba(255,255,255,0.10)':'rgba(255,255,255,0.07)'},{passive:true});
+</script>
+</body>
+</html>
