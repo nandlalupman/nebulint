@@ -51,6 +51,8 @@ npm run admin:credentials -- admin@nebulint.com "Use-A-Strong-Password" "NEBULIN
 
 3. Copy the generated SQL into the Supabase SQL editor and run it.
 
+The schema seeds `public.open_roles` and `public.case_studies` with the same copy used as the site's fallback content, so the live Supabase data starts aligned with the public site. If you change either table in `/admin`, that content becomes the new source of truth.
+
 Then open `/admin`, sign in with the email and password, and manage:
 
 - Client project inquiries and their review status.

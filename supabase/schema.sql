@@ -93,7 +93,6 @@ values
   ('Industrial Vision Intelligence', 'Computer vision pipelines for detection, tracking, inspection, and real-time facility analytics.', 'Computer Vision', 20),
   ('Robotics Command Interface', 'ROS-compatible control surfaces, fleet telemetry, safety states, and hardware-system communication.', 'Robotics', 30),
   ('Predictive Infrastructure Engine', 'Forecasting, queue health, capacity signals, automated escalation, and reliability analytics.', 'Infrastructure', 40),
-  ('AI Surveillance System', 'Edge AI monitoring, event routing, security review workflows, and visual intelligence overlays.', 'AI Security', 50),
-  ('Real-Time Analytics Network', 'Streaming data architecture, live dashboards, data quality checks, and distributed processing.', 'Data Systems', 60),
-  ('Smart Factory Intelligence Platform', 'Machine-state monitoring, production insights, robotics coordination, and automation triggers.', 'Industrial AI', 70)
+  ('Smart Factory Intelligence Platform', 'Machine-state monitoring, production insights, robotics coordination, and automation triggers.', 'Industrial AI', 50),
+  ('Real-Time Analytics Network', 'Streaming data architecture, live dashboards, data quality checks, and distributed processing.', 'Data Systems', 60)
 on conflict do nothing;
