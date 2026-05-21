@@ -65,7 +65,7 @@ main {
 
 main.admin-login-page,
 main.admin-shell {
-  padding-top: 72px;
+  padding-top: 0;
 }
 
 a {
@@ -2799,7 +2799,7 @@ h3 {
 
 .admin-login-page,
 .admin-shell {
-  min-height: calc(100vh - 86px);
+  min-height: 100vh;
   background:
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     linear-gradient(var(--grid-line) 1px, transparent 1px),
@@ -2919,8 +2919,8 @@ h3 {
 
 .admin-sidebar {
   position: sticky;
-  top: 86px;
-  height: calc(100vh - 86px);
+  top: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 24px;
