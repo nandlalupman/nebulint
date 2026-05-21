@@ -17,11 +17,12 @@
 
 1. Create a Supabase project.
 2. Run `supabase/schema.sql` in the Supabase SQL editor.
-3. Add these environment variables in Vercel:
+3. Run `supabase/admin-auth.sql` in the Supabase SQL editor.
+4. Add these environment variables in Vercel:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
    - `ADMIN_SESSION_SECRET`
-4. Deploy to Vercel.
+5. Deploy to Vercel.
 
 The service role key stays server-side only. Do not expose it in client components.
 
@@ -60,3 +61,19 @@ Then open `/admin`, sign in with the email and password, and manage:
 Public pages use professional fallback content if Supabase is not configured yet.
 
 `ADMIN_TOKEN` is still supported as an emergency legacy header token, but normal admin usage should use Supabase credentials.
+
+## What Makes The Backend Work
+
+If you want inquiries, careers, admin editing, and case studies to work in production, you need all of these in place:
+
+1. A Supabase database with the schema loaded from `supabase/schema.sql` and `supabase/admin-auth.sql`.
+2. Production environment variables:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ADMIN_SESSION_SECRET`
+   - `DEV_ADMIN_EMAIL` and `DEV_ADMIN_PASSWORD` only for local demo mode
+3. A deployed Next.js app that can reach Supabase from server routes.
+4. Seed data in `public.case_studies` and `public.open_roles` if you want the home page and careers page to show real content immediately.
+5. Optional but recommended: connect email delivery later for form confirmations.
+
+Without Supabase config, the app still renders fallback content, but the admin console and form submissions will not persist data.

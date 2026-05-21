@@ -80,6 +80,62 @@ const products = [
   }
 ];
 
+const researchPrograms = [
+  {
+    title: "Applied AI Systems",
+    summary: "Model evaluation, inference workflows, and operational safeguards for production AI deployments.",
+    detail: "Benchmarked on latency, failure modes, and human oversight"
+  },
+  {
+    title: "Robotics R&D",
+    summary: "Control interfaces, telemetry loops, and hardware-software coordination for autonomous platforms.",
+    detail: "Designed for ROS, edge compute, and live operators"
+  },
+  {
+    title: "Infrastructure Innovation",
+    summary: "Event-driven backend systems, monitoring layers, and resilient deployment patterns.",
+    detail: "Focused on observability, uptime, and secure service boundaries"
+  },
+  {
+    title: "Autonomous Intelligence",
+    summary: "Decision layers that connect sensors, models, and response workflows into one operating surface.",
+    detail: "Built for explainability and deployment realism"
+  }
+];
+
+const fallbackCaseStudies = [
+  {
+    title: "Autonomous Monitoring Platform",
+    summary: "Live infrastructure telemetry, model-backed anomaly detection, alerting, and operator dashboards.",
+    category: "Operations"
+  },
+  {
+    title: "Industrial Vision Intelligence",
+    summary: "Computer vision pipelines for detection, tracking, inspection, and real-time facility analytics.",
+    category: "Computer Vision"
+  },
+  {
+    title: "Robotics Command Interface",
+    summary: "ROS-compatible control surfaces, fleet telemetry, safety states, and hardware-system communication.",
+    category: "Robotics"
+  },
+  {
+    title: "Predictive Infrastructure Engine",
+    summary: "Forecasting, queue health, capacity signals, automated escalation, and reliability analytics.",
+    category: "Infrastructure"
+  },
+  {
+    title: "Smart Factory Intelligence Platform",
+    summary: "Machine-state monitoring, production insights, robotics coordination, and automation triggers.",
+    category: "Industrial AI"
+  },
+  {
+    title: "Real-Time Analytics Network",
+    summary: "Streaming data architecture, live dashboards, data quality checks, and distributed processing.",
+    category: "Data Systems"
+  }
+];
+
 function Header() {
   return (
     <header className="site-header">
@@ -415,11 +471,12 @@ export default async function Home() {
             <h2>EXPERIMENTATION LABS FOR FUTURE INTELLIGENCE.</h2>
           </div>
           <div className="research-grid">
-            {["AI research", "Robotics R&D", "Infrastructure innovation", "Autonomous intelligence"].map((item) => (
-              <article key={item}>
+            {researchPrograms.map((item) => (
+              <article key={item.title}>
                 <GitBranch size={20} />
-                <h3>{item}</h3>
-                <p>Applied exploration with production constraints: latency, observability, reliability, and deployment realism.</p>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <small>{item.detail}</small>
               </article>
             ))}
           </div>
@@ -431,9 +488,10 @@ export default async function Home() {
             <h2>ENTERPRISE DEPLOYMENTS, DESIGNED AS SYSTEMS.</h2>
           </div>
           <div className="case-grid">
-            {cases.map((item, index) => (
-              <article key={item.id || item.title} className="case-card">
-                <span>0{index + 1}</span>
+            {(cases.length ? cases : fallbackCaseStudies).map((item, index) => (
+              <article key={"id" in item ? item.id || item.title : item.title} className="case-card">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {"category" in item && item.category ? <small>{item.category}</small> : null}
                 <h3>{item.title}</h3>
                 <p>{item.summary}</p>
               </article>
