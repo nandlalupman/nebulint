@@ -2,9 +2,9 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
-  Activity, BriefcaseBusiness, Building2, Edit3, Eye, EyeOff,
+  BriefcaseBusiness, Edit3, Eye, EyeOff,
   FileText, Inbox, LayoutDashboard, Loader2, Lock, LogIn, LogOut,
-  Plus, RefreshCcw, Search, Settings, ShieldCheck, Trash2, Users, X
+  Plus, RefreshCcw, Search, Settings, Trash2, Users, X
 } from "lucide-react";
 
 type Inquiry = { id: string; name: string; email: string; company?: string | null; project_type: string; timeline?: string | null; environment?: string | null; brief: string; status: string; created_at: string };
@@ -168,22 +168,17 @@ export function AdminDashboard() {
       <main className="admin-login-page">
         <section className="admin-login-shell">
           <div className="admin-login-copy">
-            <span className="admin-kicker"><Lock size={15} /> Secure admin access</span>
-            <h1>NEBULINT Operations Console</h1>
-            <p>Review project inquiries, career profiles, open roles, and published work from a protected backend dashboard.</p>
-            <div className="admin-login-proof">
-              <span><ShieldCheck size={16} /> Signed session</span>
-              <span><Activity size={16} /> Live Supabase data</span>
-              <span><Building2 size={16} /> Content operations</span>
-            </div>
+            <span className="admin-kicker"><Lock size={15} /> Admin access</span>
+            <h1>Sign in</h1>
+            <p>Enter your admin email and password to continue.</p>
           </div>
           <form className="admin-login-card" onSubmit={submitLogin}>
             <div>
-              <h2>Admin sign in</h2>
-              <p>Use Supabase admin credentials. Local demo: admin@nebulint.local / NebulintAdmin123!</p>
+              <h2>Welcome back</h2>
+              <p>Use your admin credentials to access the dashboard.</p>
             </div>
-            <label>Email<input value={credentials.email} onChange={e => setCredentials({ ...credentials, email: e.target.value })} type="email" placeholder="admin@nebulint.com" required /></label>
-            <label>Password<input value={credentials.password} onChange={e => setCredentials({ ...credentials, password: e.target.value })} type="password" placeholder="Admin password" required /></label>
+            <label>Email<input value={credentials.email} onChange={e => setCredentials({ ...credentials, email: e.target.value })} type="email" placeholder="Email address" required /></label>
+            <label>Password<input value={credentials.password} onChange={e => setCredentials({ ...credentials, password: e.target.value })} type="password" placeholder="Password" required /></label>
             <button className="button primary" type="submit" disabled={loading}>{loading ? <Loader2 size={16} className="spin" /> : <LogIn size={16} />} Sign In</button>
             {message ? <p className="admin-message">{message}</p> : null}
           </form>

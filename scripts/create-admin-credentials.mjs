@@ -35,7 +35,7 @@ insert into public.admin_users (email, name, password_hash, is_active)
 values (
   ${emailValue},
   ${nameValue},
-  crypt(${passwordValue}, gen_salt('bf')),
+  extensions.crypt(${passwordValue}, extensions.gen_salt('bf')),
   true
 )
 on conflict (email)

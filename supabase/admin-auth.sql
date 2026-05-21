@@ -22,7 +22,7 @@ as $$
   from public.admin_users
   where lower(admin_users.email) = lower(admin_email)
     and admin_users.is_active = true
-    and admin_users.password_hash = crypt(admin_password, admin_users.password_hash)
+    and admin_users.password_hash = extensions.crypt(admin_password, admin_users.password_hash)
   limit 1;
 $$;
 

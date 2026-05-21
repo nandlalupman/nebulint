@@ -1,3 +1,9 @@
+import { loadEnvConfig } from "@next/env";
+import { existsSync, readFileSync } from "fs";
+import { join } from "path";
+
+loadEnvConfig(process.cwd());
+
 export type ProjectInquiry = {
   name: string;
   email: string;
@@ -43,30 +49,49 @@ export type WorkItem = {
   updated_at?: string;
 };
 
-const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function readLocalEnvValue(name: string) {
+  const envPath = join(process.cwd(), ".env.local");
+  if (!existsSync(envPath)) return "";
+
+  const line = readFileSync(envPath, "utf8")
+    .split(/\r?\n/)
+    .find((entry) => entry.trim().startsWith(`${name}=`));
+
+  return line ? line.slice(line.indexOf("=") + 1).trim() : "";
+}
+
+function getSupabaseConfig() {
+  return {
+    supabaseUrl: process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || readLocalEnvValue("SUPABASE_URL"),
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || readLocalEnvValue("SUPABASE_SERVICE_ROLE_KEY")
+  };
+}
 
 function assertSupabaseConfig() {
+  const { supabaseUrl, serviceRoleKey } = getSupabaseConfig();
   if (!supabaseUrl || !serviceRoleKey) {
     throw new Error("Supabase is not configured. Please define SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.");
   }
 }
 
 export function isSupabaseConfigured() {
+  const { supabaseUrl, serviceRoleKey } = getSupabaseConfig();
   return Boolean(supabaseUrl && serviceRoleKey);
 }
 
 export async function supabaseRequest<T>(path: string, init: RequestInit = {}) {
   assertSupabaseConfig();
+  const { supabaseUrl, serviceRoleKey } = getSupabaseConfig();
+  const headers = new Headers(init.headers);
+  headers.set("apikey", serviceRoleKey);
+  headers.set("Authorization", `Bearer ${serviceRoleKey}`);
 
-  const endpoint = `${supabaseUrl!.replace(/\/$/, "")}/rest/v1/${path}`;
+  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/${path}`;
   const response = await fetch(endpoint, {
+    ...init,
     headers: {
-      apikey: serviceRoleKey!,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      ...(init.headers || {})
-    },
-    ...init
+      ...Object.fromEntries(headers.entries())
+    }
   });
 
   if (!response.ok) {
