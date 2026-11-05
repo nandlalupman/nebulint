@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { createCareerApplication } from "../../../lib/supabase/rest";
-
-function clean(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
+import { apiError } from "../../../lib/api";
+import { email as validEmail, record, safeUrl, text } from "../../../lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const name = clean(body.name);
-    const email = clean(body.email);
-    const role = clean(body.role);
-    const portfolio = clean(body.portfolio);
-    const statement = clean(body.statement);
+    const body = record(await request.json());
+    const name = text(body.name, "Name", 160, true);
+    const email = validEmail(body.email);
+    const role = text(body.role, "Role", 200, true);
+    const portfolio = safeUrl(body.portfolio, "Portfolio");
+    const statement = text(body.statement, "Engineering statement", 15000, true);
 
     if (!name || !email || !role || !statement) {
       return NextResponse.json(
@@ -27,23 +25,11 @@ export async function POST(request: Request) {
       role,
       portfolio,
       statement,
-      source: clean(body.source) || "careers_page"
+      source: "careers_page"
     });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unable to submit application.";
-    const status = message.includes("Supabase is not configured") ? 503 : 500;
-
-    return NextResponse.json(
-      {
-        ok: false,
-        message:
-          status === 503
-            ? "Career intake is ready, but Supabase environment variables are not configured yet."
-            : message
-      },
-      { status }
-    );
+    return apiError(error, "Unable to submit application. Please try again later.");
   }
 }

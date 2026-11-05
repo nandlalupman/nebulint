@@ -1,22 +1,20 @@
 import { NextResponse } from "next/server";
 import { createProjectInquiry, ProjectInquiry } from "../../../lib/supabase/rest";
-
-function clean(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
+import { apiError } from "../../../lib/api";
+import { email, record, text } from "../../../lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = record(await request.json());
     const inquiry: ProjectInquiry = {
-      name: clean(body.name),
-      email: clean(body.email),
-      company: clean(body.company),
-      projectType: clean(body.projectType),
-      timeline: clean(body.timeline),
-      environment: clean(body.environment),
-      brief: clean(body.brief),
-      source: clean(body.source) || "website"
+      name: text(body.name, "Name", 160, true),
+      email: email(body.email),
+      company: text(body.company, "Company", 200),
+      projectType: text(body.projectType, "Project type", 200, true),
+      timeline: text(body.timeline, "Timeline", 200),
+      environment: text(body.environment, "Environment", 200),
+      brief: text(body.brief, "Technical brief", 15000, true),
+      source: "contact_page"
     };
 
     if (!inquiry.name || !inquiry.email || !inquiry.projectType || !inquiry.brief) {
@@ -26,19 +24,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const rows = await createProjectInquiry(inquiry);
-    return NextResponse.json({ ok: true, inquiry: Array.isArray(rows) ? rows[0] : rows });
+    await createProjectInquiry(inquiry);
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unable to process inquiry.";
-    const status = message.includes("Supabase is not configured") ? 503 : 500;
-    return NextResponse.json(
-      {
-        ok: false,
-        message: status === 503
-          ? "Inquiry backend is not configured yet. Add Supabase environment variables in Vercel."
-          : message
-      },
-      { status }
-    );
+    return apiError(error, "Unable to send inquiry. Please try again later.");
   }
 }

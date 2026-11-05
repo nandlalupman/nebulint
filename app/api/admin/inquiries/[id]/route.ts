@@ -1,3 +1,5 @@
+import { apiError } from "../../../../../lib/api";
+import { choice, record } from "../../../../../lib/validation";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "../../../../../lib/admin-auth";
 import { updateRow, deleteRow } from "../../../../../lib/supabase/rest";
@@ -8,8 +10,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   try {
     const { id } = await params;
-    const body = await request.json();
-    const status = typeof body.status === "string" ? body.status.trim() : "";
+    const body = record(await request.json());
+    const status = choice(body.status, ["new", "reviewing", "qualified", "contacted", "closed"], "review status");
 
     if (!status) {
       return NextResponse.json({ ok: false, message: "Status is required." }, { status: 400 });
@@ -18,10 +20,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const inquiry = await updateRow("project_inquiries", id, { status });
     return NextResponse.json({ ok: true, inquiry });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, message: error instanceof Error ? error.message : "Unable to update inquiry." },
-      { status: 500 }
-    );
+    return apiError(error, "Unable to update inquiry.");
   }
 }
 
@@ -35,9 +34,6 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     await deleteRow("project_inquiries", id);
     return NextResponse.json({ ok: true });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, message: error instanceof Error ? error.message : "Unable to delete inquiry." },
-      { status: 500 }
-    );
+    return apiError(error, "Unable to delete inquiry.");
   }
 }

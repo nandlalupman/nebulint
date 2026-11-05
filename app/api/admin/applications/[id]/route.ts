@@ -1,3 +1,5 @@
+import { apiError } from "../../../../../lib/api";
+import { choice, record } from "../../../../../lib/validation";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "../../../../../lib/admin-auth";
 import { updateRow, deleteRow } from "../../../../../lib/supabase/rest";
@@ -8,8 +10,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   try {
     const { id } = await params;
-    const body = await request.json();
-    const status = typeof body.status === "string" ? body.status.trim() : "";
+    const body = record(await request.json());
+    const status = choice(body.status, ["new", "reviewing", "qualified", "contacted", "closed"], "review status");
 
     if (!status) {
       return NextResponse.json({ ok: false, message: "Status is required." }, { status: 400 });
@@ -18,10 +20,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const application = await updateRow("career_applications", id, { status });
     return NextResponse.json({ ok: true, application });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, message: error instanceof Error ? error.message : "Unable to update application." },
-      { status: 500 }
-    );
+    return apiError(error, "Unable to update application.");
   }
 }
 
@@ -35,9 +34,6 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     await deleteRow("career_applications", id);
     return NextResponse.json({ ok: true });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, message: error instanceof Error ? error.message : "Unable to delete application." },
-      { status: 500 }
-    );
+    return apiError(error, "Unable to delete application.");
   }
 }

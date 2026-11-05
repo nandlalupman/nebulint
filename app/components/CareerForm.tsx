@@ -57,12 +57,13 @@ export function CareerForm({ roles }: { roles: OpenRole[] }) {
         Role interest
         <select name="role" defaultValue="" required>
           <option value="" disabled>Select a role</option>
+          {!roles.length ? <option>General interest</option> : null}
           {roles.map((role) => <option key={role.id || role.title}>{role.title}</option>)}
         </select>
       </label>
       <label>
         Portfolio / GitHub
-        <input name="portfolio" placeholder="https://" />
+        <input name="portfolio" type="url" placeholder="https://" />
       </label>
       <label>
         Engineering statement

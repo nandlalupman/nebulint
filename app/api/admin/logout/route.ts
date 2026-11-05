@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { revokeAdminSession } from "../../../../lib/admin-auth";
+import { requireAdmin, revokeAdminSession } from "../../../../lib/admin-auth";
 
 function readCookie(request: Request, name: string) {
   const cookie = request.headers.get("cookie") || "";
@@ -8,10 +8,12 @@ function readCookie(request: Request, name: string) {
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${name}=`));
 
-  return match ? decodeURIComponent(match.slice(name.length + 1)) : "";
+  try { return match ? decodeURIComponent(match.slice(name.length + 1)) : ""; } catch { return ""; }
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.ok && auth.response.status !== 401) return auth.response;
   const sessionToken = readCookie(request, "nebulint_admin_session");
   await revokeAdminSession(sessionToken);
   const response = NextResponse.json({ ok: true, message: "Signed out." });

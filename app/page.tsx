@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { getCaseStudies } from "../lib/content";
+import { getCampaigns, getCaseStudies, getPublicSettings } from "../lib/content";
+import { CampaignCard } from "./components/CampaignCard";
+import { ContentImage } from "./components/ContentImage";
+import { safeUrl } from "../lib/validation";
 import { ThemeToggle } from "./components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
@@ -19,12 +22,9 @@ import {
   Eye,
   Factory,
   GitBranch,
-  Lock,
   Network,
   Radio,
-  Satellite,
   Server,
-  Shield,
   Workflow
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -153,78 +153,24 @@ function Header() {
   );
 }
 
-function SystemVisual() {
-  return (
-    <div className="system-visual" aria-label="Real-time infrastructure visualization">
-      <div className="visual-topline">
-        <span>NEBULINT OPS / LIVE SYSTEM MAP</span>
-        <span className="live-dot">ACTIVE</span>
-      </div>
-      <div className="map-panel">
-        <div className="node n1"><Server size={16} /> Core</div>
-        <div className="node n2"><Eye size={16} /> Vision</div>
-        <div className="node n3"><Radio size={16} /> Edge</div>
-        <div className="node n4"><Factory size={16} /> Robotics</div>
-        <div className="node n5"><Shield size={16} /> Security</div>
-        <span className="link-line l1" />
-        <span className="link-line l2" />
-        <span className="link-line l3" />
-        <span className="link-line l4" />
-      </div>
-      <div className="telemetry-grid">
-        {["Inference", "Telemetry", "Vision", "Fleet", "Queue", "Alerts"].map((item, index) => (
-          <div className="telemetry" key={item}>
-            <span>{item}</span>
-            <strong>{[12, 98, 41, 76, 204, 7][index]}{index === 0 ? "ms" : index === 1 ? "%" : ""}</strong>
-          </div>
-        ))}
-      </div>
-      <div className="signal-stack">
-        {Array.from({ length: 22 }).map((_, index) => (
-          <span key={index} style={{ height: `${18 + ((index * 17) % 58)}px` }} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ArchitectureFlow() {
-  const layers = [
-    "Sensors",
-    "Data Acquisition",
-    "AI Processing Layer",
-    "Computer Vision Models",
-    "Inference Engine",
-    "Cloud Infrastructure",
-    "Real-Time Dashboard",
-    "Alert & Automation Systems"
-  ];
-
-  return (
-    <div className="architecture-flow">
-      {layers.map((layer, index) => (
-        <div className="flow-row" key={layer}>
-          <div className="flow-index">0{index + 1}</div>
-          <div className="flow-card">
-            <span>{layer}</span>
-            <small>{["MQTT", "Kafka", "CUDA", "OpenCV", "FastAPI", "K8s", "WebSocket", "Rules"][index]}</small>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Footer() {
+function Footer({ settings }: { settings: Record<string, Record<string, string>> }) {
+  const company = settings.company || {};
+  const social = settings.social || {};
+  const links = Object.entries(social).flatMap(([name, value]) => {
+    try { const href = safeUrl(value, name); return href ? [{ name, href }] : []; } catch { return []; }
+  });
+  const contactEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email || "") ? company.email : "contact@nebulint.com";
   return (
     <footer className="footer">
       <div className="footer-main">
         <div>
           <div className="footer-logo"><NebulintLogo showTagline /></div>
-          <p>Engineering intelligent systems for modern infrastructure.</p>
+          <strong>{company.name || "NEBULINT"}{company.tagline ? ` / ${company.tagline}` : ""}</strong>
+          <p>{company.description || "Engineering intelligent systems for modern infrastructure."}</p>
+          {company.phone ? <p>{company.phone}</p> : null}
           <div className="footer-contact-strip">
             <Link href="/contact">Start a project</Link>
-            <a href="mailto:contact@nebulint.com">contact@nebulint.com</a>
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
             <Link href="/services">AI development services</Link>
           </div>
         </div>
@@ -268,12 +214,13 @@ function Footer() {
           <Link href="/about">About</Link>
           <a href="#research">Research</a>
           <Link href="/careers">Careers</Link>
+          <Link href="/verify">Verify a record</Link>
+          <Link href="/campaigns">Campaigns</Link>
           <Link href="/contact">Contact</Link>
         </div>
         <div>
           <h4>Network</h4>
-          <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+          {links.map(link => <a key={link.name} href={link.href} target="_blank" rel="noreferrer">{link.name === "github" ? "GitHub" : link.name === "linkedin" ? "LinkedIn" : "X / Twitter"}</a>)}
           <a href="mailto:research@nebulint.com">Research Desk</a>
         </div>
       </div>
@@ -286,7 +233,10 @@ function Footer() {
 }
 
 export default async function Home() {
-  const cases = await getCaseStudies();
+  const [cases, campaigns, settings] = await Promise.all([getCaseStudies(), getCampaigns(), getPublicSettings()]);
+  const hero = settings.hero || {};
+  let ctaUrl = "/contact";
+  try { ctaUrl = safeUrl(hero.cta_url, "CTA URL", true) || "/contact"; } catch {}
 
   return (
     <>
@@ -296,13 +246,12 @@ export default async function Home() {
           <div className="ambient-grid" />
           <div className="hero-copy">
             <div className="eyebrow"><span /> Advanced Systems Engineering</div>
-            <h1>ENGINEERING THE FUTURE OF INTELLIGENT SYSTEMS.</h1>
+            <h1>{hero.title || "ENGINEERING THE FUTURE OF INTELLIGENT SYSTEMS."}</h1>
             <p>
-              NEBULINT develops advanced AI infrastructure, robotics platforms, computer vision systems,
-              and enterprise-scale operational technology for real-world environments.
+              {hero.subtitle || "NEBULINT develops advanced AI infrastructure, robotics platforms, computer vision systems, and enterprise-scale operational technology for real-world environments."}
             </p>
             <div className="hero-actions">
-              <Link href="/contact" className="button primary">Start a Project <ArrowRight size={17} /></Link>
+              <Link href={ctaUrl} className="button primary">{hero.cta_text || "Start a Project"} <ArrowRight size={17} /></Link>
               <a href="#systems" className="button secondary">Explore Systems</a>
             </div>
           </div>
@@ -320,6 +269,11 @@ export default async function Home() {
           ].map(([value, label]) => (
             <div key={label}><strong>{value}</strong><span>{label}</span></div>
           ))}
+        </section>
+
+        <section className="campaign-section" id="campaigns">
+          <div className="section-head"><div className="eyebrow"><span /> Happening at NEBULINT</div><h2>OUR ONGOING CAMPAIGNS.</h2><Link href="/campaigns" className="campaign-link">All campaigns <ArrowRight size={17} /></Link></div>
+          {campaigns.length ? <div className="campaign-grid">{campaigns.slice(0, 3).map(campaign => <CampaignCard key={campaign.id} campaign={campaign} />)}</div> : <div className="public-empty"><h3>New initiatives are on the way.</h3><p>Check back for upcoming programs and opportunities.</p></div>}
         </section>
 
         <section className="client-access" aria-label="Client contact access">
@@ -488,8 +442,9 @@ export default async function Home() {
             <h2>ENTERPRISE DEPLOYMENTS, DESIGNED AS SYSTEMS.</h2>
           </div>
           <div className="case-grid">
-            {(cases.length ? cases : fallbackCaseStudies).map((item, index) => (
+            {(cases ?? fallbackCaseStudies).map((item, index) => (
               <article key={"id" in item ? item.id || item.title : item.title} className="case-card">
+                {"image_url" in item && item.image_url ? <ContentImage src={String(item.image_url)} alt={item.title} className="case-image" /> : null}
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 {"category" in item && item.category ? <small>{item.category}</small> : null}
                 <h3>{item.title}</h3>
@@ -540,7 +495,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

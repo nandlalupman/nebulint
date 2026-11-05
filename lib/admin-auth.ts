@@ -11,7 +11,7 @@ function readCookie(request: Request, name: string) {
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${name}=`));
 
-  return match ? decodeURIComponent(match.slice(name.length + 1)) : "";
+  try { return match ? decodeURIComponent(match.slice(name.length + 1)) : ""; } catch { return ""; }
 }
 
 function makeSessionToken() {
@@ -67,12 +67,23 @@ async function clearExpiredAdminSessions() {
 }
 
 export async function requireAdmin(request: Request) {
+  if (!["GET", "HEAD"].includes(request.method)) {
+    const origin = request.headers.get("origin");
+    if (origin && origin !== new URL(request.url).origin) {
+      return { ok: false as const, response: NextResponse.json({ ok: false, message: "Cross-origin request denied." }, { status: 403 }) };
+    }
+  }
   const sessionToken = readCookie(request, cookieName);
-
-  await clearExpiredAdminSessions();
-
-  if (await verifyAdminSession(sessionToken)) {
-    return { ok: true as const };
+  if (/^[a-f0-9]{64}$/.test(sessionToken)) {
+    try {
+      if (await verifyAdminSession(sessionToken)) {
+        await clearExpiredAdminSessions();
+        return { ok: true as const };
+      }
+    } catch (error) {
+      console.error("Unable to verify admin session:", error);
+      return { ok: false as const, response: NextResponse.json({ ok: false, message: "Admin service is temporarily unavailable." }, { status: 503 }) };
+    }
   }
 
   return {

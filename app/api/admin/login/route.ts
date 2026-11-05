@@ -1,21 +1,20 @@
 import { NextResponse } from "next/server";
 import { createAdminCookie, createAdminSession } from "../../../../lib/admin-auth";
 import { supabaseRequest } from "../../../../lib/supabase/rest";
+import { apiError } from "../../../../lib/api";
+import { email as validEmail, record, text } from "../../../../lib/validation";
 
 type LoginResult = {
   email: string;
   name: string | null;
 };
 
-function clean(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
-
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const email = clean(body.email).toLowerCase();
-    const password = clean(body.password);
+    const body = record(await request.json());
+    const email = validEmail(body.email).toLowerCase();
+    text(body.password, "Password", 256, true);
+    const password = body.password as string;
 
     if (!email || !password) {
       return NextResponse.json({ ok: false, message: "Admin email and password are required." }, { status: 400 });
@@ -43,9 +42,6 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unable to sign in.";
-    const status = message.includes("Supabase is not configured") ? 503 : 500;
-
-    return NextResponse.json({ ok: false, message }, { status });
+    return apiError(error, "Unable to sign in. Please try again later.");
   }
 }

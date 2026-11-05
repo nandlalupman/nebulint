@@ -89,21 +89,23 @@ alter table public.admin_sessions enable row level security;
 -- Keep direct browser inserts disabled unless you intentionally add a public policy.
 
 insert into public.open_roles (title, summary, department, location, type, sort_order)
-values
+select seed.* from (values
   ('Computer Vision Engineer', 'Detection, tracking, segmentation, edge analytics, and industrial monitoring systems.', 'Applied AI', 'Remote / Hybrid', 'Engineering', 10),
   ('Robotics Systems Engineer', 'ROS-compatible control layers, telemetry loops, robotics dashboards, and autonomy interfaces.', 'Robotics', 'Remote / Hybrid', 'Engineering', 20),
   ('AI/ML Engineer', 'Model evaluation, inference services, data pipelines, and production ML infrastructure.', 'Machine Learning', 'Remote / Hybrid', 'Engineering', 30),
   ('Full Stack Platform Engineer', 'Operational dashboards, product workflows, admin systems, APIs, and real-time interfaces.', 'Platform', 'Remote / Hybrid', 'Engineering', 40),
   ('Research Engineer', 'Applied experimentation with measurable reliability, latency, and deployment outcomes.', 'R&D', 'Remote / Hybrid', 'Research', 50),
   ('Backend Systems Engineer', 'APIs, queues, databases, observability, deployment automation, and secure service boundaries.', 'Infrastructure', 'Remote / Hybrid', 'Engineering', 60)
-on conflict do nothing;
+) as seed(title, summary, department, location, type, sort_order)
+where not exists (select 1 from public.open_roles existing where existing.title = seed.title);
 
 insert into public.case_studies (title, summary, category, sort_order)
-values
+select seed.* from (values
   ('Autonomous Monitoring Platform', 'Live infrastructure telemetry, model-backed anomaly detection, alerting, and operator dashboards.', 'Operations', 10),
   ('Industrial Vision Intelligence', 'Computer vision pipelines for detection, tracking, inspection, and real-time facility analytics.', 'Computer Vision', 20),
   ('Robotics Command Interface', 'ROS-compatible control surfaces, fleet telemetry, safety states, and hardware-system communication.', 'Robotics', 30),
   ('Predictive Infrastructure Engine', 'Forecasting, queue health, capacity signals, automated escalation, and reliability analytics.', 'Infrastructure', 40),
   ('Smart Factory Intelligence Platform', 'Machine-state monitoring, production insights, robotics coordination, and automation triggers.', 'Industrial AI', 50),
   ('Real-Time Analytics Network', 'Streaming data architecture, live dashboards, data quality checks, and distributed processing.', 'Data Systems', 60)
-on conflict do nothing;
+) as seed(title, summary, category, sort_order)
+where not exists (select 1 from public.case_studies existing where existing.title = seed.title);

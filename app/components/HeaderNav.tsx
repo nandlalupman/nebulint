@@ -10,18 +10,19 @@ const navItems = [
   { label: "About", href: "/about", key: "about" },
   { label: "Services", href: "/services", key: "services" },
   { label: "Products", href: "/#products", key: "products" },
-  { label: "Architecture", href: "/#architecture", key: "architecture" },
-  { label: "Operations", href: "/#operations", key: "operations" },
-  { label: "Research", href: "/#research", key: "research" },
+  { label: "Campaigns", href: "/campaigns", key: "campaigns" },
+  { label: "Verify", href: "/verify", key: "verify" },
   { label: "Careers", href: "/careers", key: "careers" }
 ];
 
 function getActiveKey(pathname: string, hash: string) {
+  if (pathname.startsWith("/campaigns")) return "campaigns";
+  if (pathname === "/verify") return "verify";
   if (pathname === "/about") return "about";
   if (pathname === "/services") return "services";
   if (pathname === "/careers") return "careers";
   if (pathname === "/" && hash) return hash.replace("#", "") || "home";
-  return "home";
+  return pathname === "/" ? "home" : "";
 }
 
 export function HeaderNav() {
@@ -62,7 +63,7 @@ export function HeaderNav() {
       </button>
       <div className="nav-links">
         {navItems.map((item) => (
-          <Link href={item.href} className={activeKey === item.key ? "active" : ""} key={item.key}>
+          <Link href={item.href} className={activeKey === item.key ? "active" : ""} key={item.key} onClick={() => setOpen(false)}>
             {item.label}
           </Link>
         ))}

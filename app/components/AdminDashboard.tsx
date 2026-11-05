@@ -4,16 +4,20 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   BriefcaseBusiness, Edit3, Eye, EyeOff,
   FileText, Inbox, LayoutDashboard, Loader2, Lock, LogIn, LogOut,
-  Plus, RefreshCcw, Search, Settings, Trash2, Users, X
+  Plus, RefreshCcw, Search, Settings, Trash2, Users, Megaphone, ShieldCheck
 } from "lucide-react";
+
+import type { Campaign, VerificationRecord } from "../../lib/records";
+import { ManagedContentPanel } from "./ManagedContentPanel";
+import { ImageUpload } from "./ImageUpload";
 
 type Inquiry = { id: string; name: string; email: string; company?: string | null; project_type: string; timeline?: string | null; environment?: string | null; brief: string; status: string; created_at: string };
 type Application = { id: string; name: string; email: string; role: string; portfolio?: string | null; statement: string; status: string; created_at: string };
 type Role = { id: string; title: string; summary?: string | null; department?: string | null; location?: string | null; type?: string | null; sort_order?: number | null; is_active?: boolean | null };
 type Work = { id: string; title: string; summary: string; category?: string | null; image_url?: string | null; sort_order?: number | null; is_active?: boolean | null };
 type SettingRow = { setting_key: string; setting_value: Record<string, unknown> };
-type Overview = { inquiries: Inquiry[]; applications: Application[]; roles: Role[]; works: Work[]; settings?: SettingRow[] };
-type Tab = "overview" | "inquiries" | "applications" | "roles" | "works" | "settings";
+type Overview = { inquiries: Inquiry[]; applications: Application[]; roles: Role[]; works: Work[]; campaigns: Campaign[]; verifications: VerificationRecord[]; settings?: SettingRow[] };
+type Tab = "overview" | "inquiries" | "applications" | "roles" | "works" | "settings" | "campaigns" | "verifications";
 
 const statusOptions = ["new", "reviewing", "qualified", "contacted", "closed"];
 const emptyRole = { title: "", summary: "", department: "", location: "Remote / Hybrid", type: "Engineering", sort_order: 100 };
@@ -47,6 +51,7 @@ export function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [roleForm, setRoleForm] = useState(emptyRole);
   const [workForm, setWorkForm] = useState(emptyWork);
+  const [uploading, setUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Record<string, string | number>>({});
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; label: string; endpoint: string } | null>(null);
@@ -114,8 +119,8 @@ export function AdminDashboard() {
       const r = await fetch(path, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const p = await r.json();
       if (!r.ok) throw new Error(p?.message || "Update failed.");
-      await load();
-    } catch (e) { setMessage(e instanceof Error ? e.message : "Update failed."); }
+      await load(); return true;
+    } catch (e) { setMessage(e instanceof Error ? e.message : "Update failed."); return false; }
     finally { setLoading(false); }
   }
 
@@ -148,8 +153,7 @@ export function AdminDashboard() {
   }
 
   async function saveEdit(endpoint: string) {
-    await patch(endpoint, editForm);
-    setEditingId(null); setEditForm({});
+    if (await patch(endpoint, editForm)) { setEditingId(null); setEditForm({}); }
   }
 
   async function saveSetting(key: string) {
@@ -193,6 +197,8 @@ export function AdminDashboard() {
     ["applications", "Career Forms", Users],
     ["roles", "Open Roles", BriefcaseBusiness],
     ["works", "Our Work", FileText],
+    ["campaigns", "Campaigns", Megaphone],
+    ["verifications", "Verification", ShieldCheck],
     ["settings", "Site Settings", Settings]
   ];
 
@@ -204,11 +210,11 @@ export function AdminDashboard() {
         <div className="admin-sidebar-head"><span>NEBULINT</span><strong>Admin OS</strong></div>
         <nav className="admin-side-nav" aria-label="Admin sections">
           {navItems.map(([id, label, Icon]) => (
-            <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><Icon size={17} /><span>{label}</span></button>
+            <button key={id} className={tab === id ? "active" : ""} onClick={() => { setTab(id); setEditingId(null); setQuery(""); }}><Icon size={17} /><span>{label}</span></button>
           ))}
         </nav>
         <button className="admin-logout-btn" onClick={logout}><LogOut size={16} /> Sign Out</button>
-        <div className="admin-sidebar-status"><span>Environment</span><strong>Local / Supabase-ready</strong></div>
+        <div className="admin-sidebar-status"><span>Environment</span><strong>Supabase connected</strong></div>
       </aside>
 
       <section className="admin-workspace">
@@ -339,7 +345,7 @@ export function AdminDashboard() {
                         </div>
                         <div className="admin-inline-actions">
                           <button className="admin-cancel-edit-btn" onClick={() => setEditingId(null)}>Cancel</button>
-                          <button className="admin-save-btn" onClick={() => saveEdit(`/api/admin/roles/${item.id}`)}>Save</button>
+                          <button className="admin-save-btn" disabled={loading || uploading} onClick={() => saveEdit(`/api/admin/roles/${item.id}`)}>Save</button>
                         </div>
                       </div>
                     )}
@@ -364,11 +370,10 @@ export function AdminDashboard() {
               <textarea placeholder="Summary" value={workForm.summary} onChange={e => setWorkForm({ ...workForm, summary: e.target.value })} required />
               <div className="admin-form-grid">
                 <input placeholder="Category" value={workForm.category} onChange={e => setWorkForm({ ...workForm, category: e.target.value })} />
-                <input placeholder="Image URL" value={workForm.image_url} onChange={e => setWorkForm({ ...workForm, image_url: e.target.value })} />
                 <input type="number" placeholder="Order" value={workForm.sort_order} onChange={e => setWorkForm({ ...workForm, sort_order: Number(e.target.value) })} />
               </div>
-              {workForm.image_url && <img className="admin-image-preview" src={workForm.image_url} alt="Preview" onError={e => (e.currentTarget.style.display = "none")} onLoad={e => (e.currentTarget.style.display = "block")} />}
-              <button className="button primary" type="submit"><Plus size={16} /> Add Work</button>
+              <ImageUpload value={workForm.image_url} onChange={url => setWorkForm(previous => ({ ...previous, image_url: url }))} onBusy={setUploading} />
+              <button className="button primary" type="submit" disabled={loading || uploading}><Plus size={16} /> Add Work</button>
             </form>
             <div className="admin-content-list">
               {filteredWorks.map(item => (
@@ -384,11 +389,11 @@ export function AdminDashboard() {
                         <textarea placeholder="Summary" value={editForm.summary ?? ""} onChange={e => setEditForm({ ...editForm, summary: e.target.value })} />
                         <div className="admin-form-grid">
                           <input placeholder="Category" value={editForm.category ?? ""} onChange={e => setEditForm({ ...editForm, category: e.target.value })} />
-                          <input placeholder="Image URL" value={editForm.image_url ?? ""} onChange={e => setEditForm({ ...editForm, image_url: e.target.value })} />
+                          <ImageUpload value={String(editForm.image_url ?? "")} onChange={url => setEditForm(previous => ({ ...previous, image_url: url }))} onBusy={setUploading} />
                         </div>
                         <div className="admin-inline-actions">
                           <button className="admin-cancel-edit-btn" onClick={() => setEditingId(null)}>Cancel</button>
-                          <button className="admin-save-btn" onClick={() => saveEdit(`/api/admin/works/${item.id}`)}>Save</button>
+                          <button className="admin-save-btn" disabled={loading || uploading} onClick={() => saveEdit(`/api/admin/works/${item.id}`)}>Save</button>
                         </div>
                       </div>
                     )}
@@ -403,6 +408,9 @@ export function AdminDashboard() {
             </div>
           </section>
         )}
+
+        {tab === "campaigns" && <ManagedContentPanel key="campaigns" kind="campaigns" items={data.campaigns} query={query} refresh={load} />}
+        {tab === "verifications" && <ManagedContentPanel key="verifications" kind="verifications" items={data.verifications} query={query} refresh={load} />}
 
         {/* SETTINGS */}
         {tab === "settings" && (

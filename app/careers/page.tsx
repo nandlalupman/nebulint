@@ -44,6 +44,7 @@ export default async function CareersPage() {
           <div className="roles-panel">
             <div className="eyebrow"><span /> Engineering Tracks</div>
             <div className="role-list">
+              {!roles.length ? <p>No open roles are listed right now. You can still share a general talent profile.</p> : null}
               {roles.map((role) => (
                 <article key={role.id || role.title}>
                   <Cpu size={18} />

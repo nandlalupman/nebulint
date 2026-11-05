@@ -1,9 +1,3 @@
-import { loadEnvConfig } from "@next/env";
-import { existsSync, readFileSync } from "fs";
-import { join } from "path";
-
-loadEnvConfig(process.cwd());
-
 export type ProjectInquiry = {
   name: string;
   email: string;
@@ -49,21 +43,10 @@ export type WorkItem = {
   updated_at?: string;
 };
 
-function readLocalEnvValue(name: string) {
-  const envPath = join(process.cwd(), ".env.local");
-  if (!existsSync(envPath)) return "";
-
-  const line = readFileSync(envPath, "utf8")
-    .split(/\r?\n/)
-    .find((entry) => entry.trim().startsWith(`${name}=`));
-
-  return line ? line.slice(line.indexOf("=") + 1).trim() : "";
-}
-
-function getSupabaseConfig() {
+export function getSupabaseConfig() {
   return {
-    supabaseUrl: process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || readLocalEnvValue("SUPABASE_URL"),
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || readLocalEnvValue("SUPABASE_SERVICE_ROLE_KEY")
+    supabaseUrl: process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || ""
   };
 }
 
@@ -159,7 +142,7 @@ export async function getSiteSettings() {
 }
 
 export async function upsertSetting(key: string, value: Record<string, unknown>) {
-  return supabaseRequest<SiteSetting[]>("site_settings", {
+  return supabaseRequest<SiteSetting[]>("site_settings?on_conflict=setting_key", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
